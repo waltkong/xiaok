@@ -42,6 +42,56 @@ class Ajax extends Backend
         return jsonp(Lang::get(), 200, [], ['json_encode_param' => JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE]);
     }
 
+
+    public function isMp3OrMp4($fileInfo){
+        if($this->isMp3($fileInfo))  return true;
+        if($this->isMp4($fileInfo))  return true;
+        return false;
+    }
+
+    private function isMp3($fileInfo){
+        if(in_array($fileInfo['type'],['audio/mpeg','audio/mp3'])){
+            return true;
+        }
+        return false;
+    }
+
+    private function isMp4($fileInfo){
+        if(in_array($fileInfo['type'],['video/mp4'])){
+            return true;
+        }
+        return false;
+    }
+
+
+    public function uploadMp3Mp4(){
+        $file = $this->request->file('file');
+        $fileInfo = $file->getInfo();
+        $suffix = strtolower(pathinfo($fileInfo['name'], PATHINFO_EXTENSION));
+        $suffix = $suffix && preg_match("/^[a-zA-Z0-9]+$/", $suffix) ? $suffix : 'file';
+        $uploadDir = '';
+        if($this->isMp4($fileInfo)){
+            $uploadDir = '/uploads/mp4/'.date('Y-m',time()).'/'.date('d',time()).'/';
+        }elseif($this->isMp3($fileInfo)){
+            $uploadDir = '/uploads/mp3/'.date('Y-m',time()).'/'.date('d',time()).'/';
+        }else{
+            return;
+        }
+
+        $fulluploadDir = ROOT_PATH . '/public'.$uploadDir;
+        if(!is_dir($fulluploadDir)){
+            mkdir($fulluploadDir,0777,1);
+        }
+
+        $fileName = date('Ymdhis',time()).rand(1000,9999).'.'.$suffix;
+
+        $splInfo = $file->move($fulluploadDir, $fileName);
+         $this->success(__('Upload successful'), null, [
+            'url' => $uploadDir . $splInfo->getSaveName()
+        ]);
+    }
+
+
     /**
      * 上传文件
      */
@@ -64,6 +114,13 @@ class Ajax extends Backend
         $typeDict = ['b' => 0, 'k' => 1, 'kb' => 1, 'm' => 2, 'mb' => 2, 'gb' => 3, 'g' => 3];
         $size = (int)$upload['maxsize'] * pow(1024, isset($typeDict[$type]) ? $typeDict[$type] : 0);
         $fileInfo = $file->getInfo();
+
+
+        if($this->isMp3OrMp4($fileInfo)){
+            return $this->uploadMp3Mp4();
+        }
+
+
         $suffix = strtolower(pathinfo($fileInfo['name'], PATHINFO_EXTENSION));
         $suffix = $suffix && preg_match("/^[a-zA-Z0-9]+$/", $suffix) ? $suffix : 'file';
 

@@ -1,0 +1,101 @@
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Cd_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <select  id="c-cd_id" class="form-control " name="row[cd_id]">
+                <option value="0"> 请选择</option>
+                {foreach name="cd_options" item="vo"}
+                <option value="{$key}"  {$row['cd_id'] == $key ? ' selected ' : ''} > {$vo}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Singer_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <select  id="c-singer_id" class="form-control " name="row[singer_id]">
+                <option value="-1"> 请选择</option>
+                {foreach name="singer_options" item="vo"}
+                <option value="{$key}"  {$row['singer_id'] == $key ? ' selected ' : ''} > {$vo}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-name" class="form-control" name="row[name]" type="text" value="{$row.name|htmlentities}">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Description')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-description" class="form-control " rows="5" name="row[description]" cols="50">{$row.description|htmlentities}</textarea>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Voice_url')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-voice_url" class="form-control" name="row[voice_url]" type="text" value="{$row.voice_url|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Vedio_url')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-vedio_url" class="form-control" name="row[vedio_url]" type="text" value="{$row.vedio_url|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Image')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="input-group">
+                <input id="c-image" class="form-control" size="50" name="row[image]" type="text" value="{$row.image|htmlentities}">
+                <div class="input-group-addon no-border no-padding">
+                    <span><button type="button" id="plupload-image" class="btn btn-danger plupload" data-input-id="c-image" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp" data-multiple="false" data-preview-id="p-image"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                    <span><button type="button" id="fachoose-image" class="btn btn-primary fachoose" data-input-id="c-image" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                </div>
+                <span class="msg-box n-right" for="c-image"></span>
+            </div>
+            <ul class="row list-inline plupload-preview" id="p-image"></ul>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Lyric')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-lyric" class="form-control " rows="5" name="row[lyric]" cols="50">{$row.lyric|htmlentities}</textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Is_recommend')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[is_recommend]', ['0'=>'不推荐', '1'=>'推荐' ], $row['is_recommend'])}
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Tag_ids')}:</label>
+        <div class="col-xs-12 col-sm-8">
+
+            {:build_checkboxs('row[tag_ids][]', $tags, $row['tag_ids'])}
+
+        </div>
+    </div>
+
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

@@ -65,7 +65,24 @@ class MusicApi extends BaseApi{
     return _data;
   }
 
-  
+  Future getSongListData(Map _map) async{
+    var data = BaseApi.getFullRequestData(_map);
+    String url = BaseApi.getFullUrl('/api/music/data/song_list');
+    var res = await HttpUtil().postHttp(url, data);
+
+    final _data = json.decode(res.toString());
+    return _data;
+  }
+
+
+  Future getSingerListData(Map _map) async{
+    var data = BaseApi.getFullRequestData(_map);
+    String url = BaseApi.getFullUrl('/api/music/data/singer_list');
+    var res = await HttpUtil().postHttp(url, data);
+
+    final _data = json.decode(res.toString());
+    return _data;
+  }
 
 
 }

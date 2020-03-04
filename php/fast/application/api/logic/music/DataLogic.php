@@ -134,6 +134,47 @@ class DataLogic{
     }
 
 
+    public function singer_list($input,$pageIndex,$eachPage){
+        $default = [
+            'data' => [],
+            'count' => 0,
+            'total' => 0,
+        ];
+        $pageOffset = ($pageIndex-1)*$eachPage;
+        $objFunc = function () use($input){
+            $obj = new Singer_model();
+            if(!empty($input['name'])){
+                $obj = $obj->where('name','like',"%{$input['name']}%");
+            }
+            return $obj;
+        };
+        $default['total'] = $objFunc()->count();
+        $list = $objFunc()
+            ->order('createtime', 'desc')
+            ->limit($pageOffset,$eachPage)->select();
+        $list = collection($list)->toArray();
+
+        foreach ($list as $k => $item){
+            $list[$k]['one_image'] = UrlUtil::getFullUrl($item['one_image']);
+
+            $list[$k]['many_images'] = (function() use($item){
+                $images = explode(',',$item['many_images']);
+                $_ret = [];
+                foreach ($images as $k2 => $v2){
+                    $_ret[] =  UrlUtil::getFullUrl($v2);
+                }
+                return implode(',',$_ret);
+            })();
+
+            $list[$k]['createtime'] = date('Y-m-d',$item['createtime']);
+        }
+        $default['data'] = $list;
+        $default['count'] = count($list);
+        return $default;
+
+    }
+
+
 
 
 }

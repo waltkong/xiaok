@@ -47,6 +47,15 @@ class Data extends Common{
         $this->success('ok',$data);
     }
 
+    public function singer_list(){
+        $input = $this->req;
+        $pageIndex = $input['pageIndex'] ?? 1;
+        $eachPage = $input['eachPage'] ?? 10;
+        $data = $this->logic->singer_list($input,(int)$pageIndex,(int)$eachPage);
+
+        $this->success('ok',$data);
+    }
+
 
 
 }

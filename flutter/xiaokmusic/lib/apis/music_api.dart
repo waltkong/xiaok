@@ -29,10 +29,34 @@ class MusicApi extends BaseApi{
 
   Future recommendCdList() async{
     var _map = {
-      'eachPage':6,
-      'pageIndex':1,
-      'is_recommend':1
+      'eachPage':'6',
+      'pageIndex':'1',
+      'is_recommend':'1',
     };
+    var data = BaseApi.getFullRequestData(_map);
+    String url = BaseApi.getFullUrl('/api/music/data/cd_list');
+    var res = await HttpUtil().postHttp(url, data);
+
+    final _data = json.decode(res.toString());
+    return _data;
+  }
+
+  Future newSongRecommendList() async{
+    var _map = {
+      'eachPage':'10',
+      'pageIndex':'1',
+      'is_recommend':'1',
+    };
+    var data = BaseApi.getFullRequestData(_map);
+    String url = BaseApi.getFullUrl('/api/music/data/song_list');
+    var res = await HttpUtil().postHttp(url, data);
+
+    final _data = json.decode(res.toString());
+    return _data;
+  }
+
+
+  Future getCdListData(Map _map) async{
     var data = BaseApi.getFullRequestData(_map);
     String url = BaseApi.getFullUrl('/api/music/data/cd_list');
     var res = await HttpUtil().postHttp(url, data);

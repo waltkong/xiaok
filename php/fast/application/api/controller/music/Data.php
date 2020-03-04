@@ -35,7 +35,15 @@ class Data extends Common{
         $input = $this->req;
         $pageIndex = $input['pageIndex'] ?? 1;
         $eachPage = $input['eachPage'] ?? 10;
-        $data = $this->logic->cd_list($input,$pageIndex,$eachPage);
+        $data = $this->logic->cd_list($input,(int)$pageIndex,(int)$eachPage);
+        $this->success('ok',$data);
+    }
+
+    public function song_list(){
+        $input = $this->req;
+        $pageIndex = $input['pageIndex'] ?? 1;
+        $eachPage = $input['eachPage'] ?? 10;
+        $data = $this->logic->song_list($input,(int)$pageIndex,(int)$eachPage);
         $this->success('ok',$data);
     }
 

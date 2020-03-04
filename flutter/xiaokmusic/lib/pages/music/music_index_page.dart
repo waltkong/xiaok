@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xiaokmusic/components/banner_component.dart';
 
@@ -16,19 +17,19 @@ class MusicIndexPage extends StatefulWidget {
 
 class _MusicIndexPageState extends State<MusicIndexPage> {
 
+  GlobalKey<RefreshFooterState> _footerKey = GlobalKey<RefreshFooterState>();
+
   var now_ad_index = 0;
-  var ad_count = 1;
-  var now_ad = {
-    'id':'',
-    'name':'',
-    'description':'',
-    'image':''
-  };
+  var ad_count = 0;
+  Map now_ad;
 
   var new_song_list =[];
+
   AudioPlayer audioPlayer;
 
   var playObj;
+
+  List recommendCdList = [];
 
   @override
   void initState() {
@@ -36,27 +37,33 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
 
     getAdList();
 
+    getRecommendCdList();
+
+    getNewSongList();
 
     audioPlayer = AudioPlayer();
 
     playObj = {
       'play_or_stop':'stop',
-      'src':'',
+      'voice_url':'',
     };
 
   }
 
   void getAdList() async{
     var data = await MusicApi().adList();
-    List addata = data.data;
+
+    List addata = data['data'];
 
     setState(() {
       this.now_ad_index = 0;
       this.ad_count = addata.length;
       this.now_ad = addata[now_ad_index];
+    });
 
-      Timer.periodic(const Duration(milliseconds: 5000), (timer){
+    Timer.periodic(const Duration(milliseconds: 5000), (timer){
 
+      setState(() {
         if(this.now_ad_index >= this.ad_count - 1){
           this.now_ad_index = 0;
           this.now_ad = addata[this.now_ad_index];
@@ -64,12 +71,27 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
           this.now_ad_index +=1;
           this.now_ad = addata[this.now_ad_index];
         }
-
       });
 
     });
 
   }
+
+  void getRecommendCdList() async{
+    var data = await MusicApi().recommendCdList();
+    setState(() {
+      this.recommendCdList = data['data']['data'];
+    });
+  }
+
+  void getNewSongList() async{
+    var data = await MusicApi().newSongRecommendList();
+    setState(() {
+//      this.new_song_list.addAll(data['data']['data']);
+      this.new_song_list = data['data']['data'];
+    });
+  }
+
 
   @override
   void deactivate() async{
@@ -86,28 +108,40 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Column(
+      child: EasyRefresh(
+        refreshFooter: ClassicsFooter(
+          key: _footerKey,
+          bgColor: Colors.white,
+          textColor: Colors.blue,
+          moreInfoColor: Colors.blue,
+          showMore: true,
+          noMoreText: '没有更多了...',
+          moreInfo: '加载中...',
+          loadReadyText: '上拉加载...',
+        ),
+        loadMore: () async{ doLoadMore();},
+        child: ListView(
           children: <Widget>[
             _searchBox(),
-
             // banner
             BannerComponent(),
-
             _categoryBox(),
 //
             _adBox(),  //广告
 //
-//            _recommendBox(), //推荐歌单
+            _recommendBox(), //推荐歌单
 //
-//            _newSongListBox(),  //新歌速递
+            _newSongListBox(),  //新歌速递
 
 
           ],
         ),
       ),
     );
+  }
+
+  void doLoadMore(){
+//    getNewSongList();
   }
 
   Widget _searchBox(){
@@ -147,21 +181,21 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
     List _catlist = [
       {
         'id':'1',
-        'name':'歌单',
+        'name':'专辑',
         'image':"images/music_menu.jpg",
-        'route':'song_list',
+        'route':'cd_list',
       },
       {
         'id':'2',
         'name':'歌手',
-        'image':"images/jay2.jpg",
+        'image':"images/jay1.jpg",
         'route':'singer_list',
       },
       {
         'id':'3',
-        'name':'新歌',
+        'name':'歌单',
         'image':"images/new_song.jpg",
-        'route':'new_song_list',
+        'route':'song_list',
       },
       {
         'id':'4',
@@ -171,48 +205,50 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
       },
     ];
 
+    List<Widget> ret = _catlist.map((item) => _categoryBoxItem(item)).toList();
 
     return Container(
       height: ScreenUtil().setHeight(170),
       padding: EdgeInsets.only(left: 10),
-      child: ListView.builder(
-        itemCount: _catlist.length,
-        itemBuilder:(BuildContext context,int index){
-          return GestureDetector(
-            onTap: (){
-              Navigator.of(context).pushNamed(_catlist[index]['route']);
-            },
-            child: Container(
-              width: ScreenUtil().setWidth(130),
-              margin: EdgeInsets.fromLTRB(10, 3, 10, 10),
-              child: Column(
-                children: <Widget>[
-
-                  Image.asset(
-                    _catlist[index]['image'],
-                    fit:BoxFit.cover,
-                    width: ScreenUtil().setWidth(90),
-                    height: ScreenUtil().setHeight(90),
-                  ),
-
-                  Container(
-                    margin: EdgeInsets.only(top:10),
-                    height: ScreenUtil().setHeight(30),
-                    child: Center(
-                      child: Text(_catlist[index]['name']),
-                    ),
-                  ),
-
-                ],
-              ),
-
-            ),
-          );
-        },
-        scrollDirection: Axis.horizontal,
+      child: Row(
+        children: ret,
       ),
     );
 
+  }
+
+
+  Widget _categoryBoxItem(item){
+    return GestureDetector(
+      onTap: (){
+        Navigator.of(context).pushNamed(item['route']);
+      },
+      child: Container(
+        width: ScreenUtil().setWidth(130),
+        margin: EdgeInsets.fromLTRB(10, 3, 10, 10),
+        child: Column(
+          children: <Widget>[
+
+            Image.asset(
+              item['image'],
+              fit:BoxFit.cover,
+              width: ScreenUtil().setWidth(90),
+              height: ScreenUtil().setHeight(90),
+            ),
+
+            Container(
+              margin: EdgeInsets.only(top:10),
+              height: ScreenUtil().setHeight(30),
+              child: Center(
+                child: Text(item['name']),
+              ),
+            ),
+
+          ],
+        ),
+
+      ),
+    );
   }
 
 
@@ -227,15 +263,21 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
       child: Row(
         children: <Widget>[
 
-          now_ad['image']==''? Container():Image.network(now_ad['image'],fit: BoxFit.cover,width: ScreenUtil().setWidth(200),),
+          ad_count==0 ? Container():Image.network(now_ad['image'],fit: BoxFit.cover,width: ScreenUtil().setWidth(200),),
 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(now_ad['name'],style: TextStyle(fontSize: 16,color: Colors.white),overflow:TextOverflow.ellipsis,),
-              Text(now_ad['description'],style: TextStyle(fontSize: 14,color: Colors.white),overflow:TextOverflow.ellipsis,),
-            ],
+          Container(
+            margin: EdgeInsets.only(left: 5),
+            child: ad_count==0 ? Container():
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(now_ad['name'],style: TextStyle(fontSize: 16,color: Colors.white),overflow:TextOverflow.ellipsis,),
+                  Text(now_ad['description'],style: TextStyle(fontSize: 14,color: Colors.white),overflow:TextOverflow.ellipsis,),
+                ],
+              ),
           ),
+
+
 
         ],
       ),
@@ -245,40 +287,8 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
 
   Widget _recommendBox(){
 
-    List recommendlist = [
-      {
-        'id':'1',
-        'name':'周杰伦金曲',
-        'image':'images/singers/jay2.jpg',
-      },
-      {
-        'id':'2',
-        'name':'jay专辑',
-        'image':'images/singers/jay3.jpg',
-      },
-      {
-        'id':'6',
-        'name':'lee专辑',
-        'image':'images/singers/lee3.jpg',
-      },
-      {
-        'id':'3',
-        'name':'邓紫棋金曲',
-        'image':'images/singers/deng1.jpg',
-      },
-      {
-        'id':'4',
-        'name':'deng专辑',
-        'image':'images/singers/deng2.jpg',
-      },
-      {
-        'id':'5',
-        'name':'李宗盛金曲',
-        'image':'images/singers/lee4.jpg',
-      },
 
-    ];
-
+    List<Widget> ret = recommendCdList.map((_item) => _recommendBoxItem(_item)).toList();
 
     return Container(
       child: Column(
@@ -286,41 +296,45 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
 
-          Text(
-            '推荐歌单',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+
+              Container(
+                padding: EdgeInsets.all(3),
+                child: Text(
+                  '推荐歌单',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+
+              Container(
+                padding: EdgeInsets.all(8),
+                child: FlatButton(
+                  onPressed: (){
+
+                  },
+                  child: Text('更多...',),
+                ),
+              ),
+
+            ],
+
           ),
 
+
           Container(
-            height: ScreenUtil().setHeight(500),
-            width: ScreenUtil().setWidth(750),
-            padding: EdgeInsets.all(3),
-            child: GridView.count(
-              crossAxisCount: 3,
-              childAspectRatio: 1.0,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              children: List.generate(6, (index){
-                return Column(
-                  children: <Widget>[
-
-                    Image.asset(
-                      recommendlist[index]['image'],
-                      width: ScreenUtil().setWidth(200),
-                      height: ScreenUtil().setHeight(160),
-                      fit: BoxFit.cover,
-                    ),
-
-                    Text(
-                      recommendlist[index]['name'],
-                    ),
-                  ],
-                );
-              }),
+            padding: EdgeInsets.all(10),
+            child: Wrap(
+              spacing:10,
+              runSpacing: 5,
+              alignment: WrapAlignment.spaceAround,
+              runAlignment: WrapAlignment.start,
+              children: recommendCdList.length > 0 ? ret:<Widget>[],
             ),
 
           ),
@@ -332,70 +346,112 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
   }
 
 
+  Widget _recommendBoxItem(item){
+    return Column(
+      children: <Widget>[
+        Image.network(
+          item['image'],
+          width: ScreenUtil().setWidth(210),
+          height: ScreenUtil().setHeight(160),
+          fit: BoxFit.cover,
+        ),
+        Text(
+          item['name'],
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
+    );
+  }
+
+
 
   Widget _newSongListBox(){
+
+    List<Widget> ret = new_song_list.map((_item) => _newSongListBoxItem(_item)).toList();
+
+
     return Container(
       margin: EdgeInsets.only(top:10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
 
-          Text(
-            '新歌速递',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+              Container(
+                padding: EdgeInsets.all(3),
+                child: Text(
+                  '新歌速递',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+
+              Container(
+                padding: EdgeInsets.all(8),
+                child: FlatButton(
+                  onPressed: (){
+
+                  },
+                  child: Text('更多...',),
+                ),
+              ),
+
+            ],
+
           ),
 
           Container(
-            height: ScreenUtil().setHeight(700),
-            child: ListView.builder(
-              itemBuilder: (BuildContext context,int index){
-                return new Container(
-                  child: ListTile(
-                    leading: Image.asset(
-                      new_song_list[index]['image'],
-                      fit: BoxFit.cover,
-                      width: ScreenUtil().setWidth(120),
-                      height: ScreenUtil().setHeight(230),
-                    ),
-                    title: Text(new_song_list[index]['name']),
-                    subtitle: Row(
-                      children: <Widget>[
-                        Text("${new_song_list[index]['singer']}-"),
-                        Text("${new_song_list[index]['box']}"),
-                      ],
-                    ),
-                    trailing: Text(new_song_list[index]['time']),
-                    onTap: (){
-                      if(playObj['play_or_stop'] == 'stop'){
-                        play(new_song_list[index]['src']);
-                        playObj['play_or_stop'] = 'play';
-                        playObj['src'] = new_song_list[index]['src'];
-                      }else{
-                        if(playObj['src'] == new_song_list[index]['src']){
-                          pause();
-                          playObj['play_or_stop'] = 'stop';
-                        }else{
-                          pause();
-                          play(new_song_list[index]['src']);
-                          playObj['play_or_stop'] = 'play';
-                          playObj['src'] = new_song_list[index]['src'];
-                        }
-                      }
-                    },
-                  ),
-                );
-              },
-              itemCount: new_song_list.length,
-//              itemExtent: 100.0,
+            child: Column(
+              children: new_song_list.length > 0?  ret:<Widget>[],
             ),
           ),
 
         ],
+      ),
+    );
+  }
+
+
+  Widget _newSongListBoxItem(item){
+    return new Container(
+      child: ListTile(
+        leading: Image.network(
+          item['image'],
+          fit: BoxFit.cover,
+          width: ScreenUtil().setWidth(120),
+          height: ScreenUtil().setHeight(230),
+        ),
+        title: Text(item['name']),
+        subtitle: Row(
+          children: <Widget>[
+            Text("${item['singer_name']}-"),
+            Text("${item['cd_name']}"),
+          ],
+        ),
+        trailing: Text(item['createtime']),
+        onTap: (){
+          if(playObj['play_or_stop'] == 'stop'){
+            play(item['voice_url']);
+            playObj['play_or_stop'] = 'play';
+            playObj['voice_url'] = item['voice_url'];
+          }else{
+            if(playObj['voice_url'] == item['voice_url']){
+              pause();
+              playObj['play_or_stop'] = 'stop';
+            }else{
+              pause();
+              play(item['voice_url']);
+              playObj['play_or_stop'] = 'play';
+              playObj['voice_url'] = item['voice_url'];
+            }
+          }
+        },
       ),
     );
   }

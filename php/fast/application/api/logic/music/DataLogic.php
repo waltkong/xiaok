@@ -4,6 +4,9 @@ namespace app\api\logic\music;
 use app\admin\model\music\Ad_model;
 use app\admin\model\music\Banner_model;
 use app\admin\model\music\Cd_model;
+use app\admin\model\music\Singer_model;
+use app\admin\model\music\Song_model;
+use app\api\repository\MusicRepository;
 use app\common\util\UrlUtil;
 
 class DataLogic{
@@ -50,14 +53,84 @@ class DataLogic{
         $list = $objFunc()
             ->order('createtime', 'desc')
             ->limit($pageOffset,$eachPage)->select();
+
         $list = collection($list)->toArray();
 
-        foreach ($list as $k => $item){
+        $singerMap = MusicRepository::getSingerIdNameMap(array_column($list,'singer_id'));
+        $tagMap = MusicRepository::getTagIdNameMap('',true);
 
+        foreach ($list as $k => $item){
+            $list[$k]['image'] = UrlUtil::getFullUrl($item['image']);
+            $list[$k]['publishtime'] = date('Y-m-d',$item['publishtime']);
+            $list[$k]['singer_name'] = $singerMap[$item['singer_id']] ?? '';
+            $tagIds = trim($item['tag_ids'],',');
+            $list[$k]['tag_names'] = (function () use($tagIds,$tagMap){
+                $tagIds = explode(',',$tagIds);
+                $ret = [];
+                foreach ($tagIds as $k2 => $v2){
+                    if(isset($tagMap[$v2])){
+                        $ret[] = $tagMap[$v2];
+                    }
+                }
+                return $ret;
+            })();
+            $list[$k]['createtime'] = date('Y-m-d',$item['createtime']);
         }
         $default['data'] = $list;
         $default['count'] = count($list);
         return $default;
+    }
+
+
+    public function song_list($input,$pageIndex,$eachPage){
+        $default = [
+            'data' => [],
+            'count' => 0,
+            'total' => 0,
+        ];
+        $pageOffset = ($pageIndex-1)*$eachPage;
+        $objFunc = function () use($input){
+            $obj = new Song_model();
+            if(!empty($input['is_recommend'])){
+                $obj = $obj->where('is_recommend',$input['is_recommend']);
+            }
+            return $obj;
+        };
+        $default['total'] = $objFunc()->count();
+        $list = $objFunc()
+            ->order('createtime', 'desc')
+            ->limit($pageOffset,$eachPage)->select();
+        $list = collection($list)->toArray();
+        $singerMap = MusicRepository::getSingerIdNameMap(array_column($list,'singer_id'));
+        $tagMap = MusicRepository::getTagIdNameMap('',true);
+        $cdMap = MusicRepository::getCdIdNameMap(array_column($list,'cd_id'));
+
+        foreach ($list as $k => $item){
+            $list[$k]['image'] = UrlUtil::getFullUrl($item['image']);
+
+            $list[$k]['voice_url'] = UrlUtil::getFullUrl($item['voice_url']);
+            $list[$k]['vedio_url'] = UrlUtil::getFullUrl($item['vedio_url']);
+
+            $list[$k]['singer_name'] = $singerMap[$item['singer_id']] ?? '';
+            $list[$k]['cd_name'] = $cdMap[$item['cd_id']] ?? '';
+            $tagIds = trim($item['tag_ids'],',');
+            $list[$k]['tag_names'] = (function () use($tagIds,$tagMap){
+                $tagIds = explode(',',$tagIds);
+                $ret = [];
+                foreach ($tagIds as $k2 => $v2){
+                    if(isset($tagMap[$v2])){
+                        $ret[] = $tagMap[$v2];
+                    }
+                }
+                return $ret;
+            })();
+            $list[$k]['createtime'] = date('Y-m-d',$item['createtime']);
+        }
+
+        $default['data'] = $list;
+        $default['count'] = count($list);
+        return $default;
+
     }
 
 

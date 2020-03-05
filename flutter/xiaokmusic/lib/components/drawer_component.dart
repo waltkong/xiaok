@@ -84,15 +84,17 @@ class _DrawerComponentState extends State<DrawerComponent> {
 
   Widget drawerHeaderBox(){
     return UserAccountsDrawerHeader(
-      accountName: Text('马云',),
+      accountName: Text('周杰伦',),
       accountEmail: Text(
-        'mayun@163.com'
+        'jay@163.com'
       ),
       currentAccountPicture: CircleAvatar(
-        backgroundImage: AssetImage("images/dog1.jpg"),
+        backgroundImage: AssetImage("images/jay1.jpg"),
       ),
     );
   }
+
+
 
 }
 

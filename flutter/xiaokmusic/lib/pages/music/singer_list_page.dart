@@ -6,6 +6,14 @@ import 'dart:async';
 import 'package:xiaokmusic/pages/music/singer_one_page.dart';
 
 class SingerListPage extends StatelessWidget {
+
+  String keyword;
+
+  SingerListPage({
+    this.keyword
+});
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,12 +28,19 @@ class SingerListPage extends StatelessWidget {
           ),
         ],
       ),
-      body: SingerListPageBody(),
+      body: SingerListPageBody(keyword: keyword,),
     );
   }
 }
 
 class SingerListPageBody extends StatefulWidget {
+
+  String keyword;
+
+  SingerListPageBody({
+    this.keyword
+  });
+
   @override
   _SingerListPageBodyState createState() => _SingerListPageBodyState();
 }
@@ -158,6 +173,11 @@ class _SingerListPageBodyState extends State<SingerListPageBody> {
       'eachPage':eachPage.toString(),
       'pageIndex':pageIndex.toString(),
     };
+
+    if(widget.keyword != null && widget.keyword != ''){
+      _map['name'] = widget.keyword;
+    }
+
     var data = await MusicApi().getSingerListData(_map);
     var _singerdata = data['data']['data'];
     setState(() {

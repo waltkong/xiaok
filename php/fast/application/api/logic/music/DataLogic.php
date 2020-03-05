@@ -47,6 +47,9 @@ class DataLogic{
             if(!empty($input['is_recommend'])){
                 $obj = $obj->where('is_recommend',$input['is_recommend']);
             }
+            if(!empty($input['name'])){
+                $obj = $obj->where('name','like',"%{$input['name']}%");
+            }
             return $obj;
         };
         $default['total'] = $objFunc()->count();
@@ -128,6 +131,9 @@ class DataLogic{
             $obj = new Song_model();
             if(!empty($input['is_recommend'])){
                 $obj = $obj->where('is_recommend',$input['is_recommend']);
+            }
+            if(!empty($input['name'])){
+                $obj = $obj->where('name',"%{$input['name']}%");
             }
             if(!empty($input['singer_id'])){
                 $obj = $obj->where('singer_id',$input['singer_id']);
@@ -246,6 +252,8 @@ class DataLogic{
         return $default;
 
     }
+
+
 
 
 

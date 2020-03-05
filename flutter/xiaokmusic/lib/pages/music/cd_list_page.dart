@@ -7,6 +7,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xiaokmusic/pages/music/cd_one_page.dart';
 
 class CdListPage extends StatelessWidget {
+
+  String keyword;
+
+  CdListPage({
+    this.keyword
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,12 +28,19 @@ class CdListPage extends StatelessWidget {
           ),
         ],
       ),
-      body: CdListPageBody(),
+      body: CdListPageBody(keyword: keyword,),
     );
   }
 }
 
 class CdListPageBody extends StatefulWidget {
+
+  String keyword;
+
+  CdListPageBody({
+    this.keyword
+  });
+
   @override
   _CdListPageBodyState createState() => _CdListPageBodyState();
 }
@@ -167,6 +181,12 @@ class _CdListPageBodyState extends State<CdListPageBody> {
       'eachPage':eachPage.toString(),
       'pageIndex':pageIndex.toString(),
     };
+
+
+    if(widget.keyword != null && widget.keyword != ''){
+      _map['name'] = widget.keyword;
+    }
+
     var data = await MusicApi().getCdListData(_map);
     var _cddata = data['data']['data'];
 

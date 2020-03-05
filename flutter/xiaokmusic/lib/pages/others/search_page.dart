@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:xiaokmusic/localdatas/search_history_data.dart';
+import 'package:xiaokmusic/pages/music/cd_list_page.dart';
+import 'package:xiaokmusic/pages/music/singer_list_page.dart';
+import 'package:xiaokmusic/pages/music/song_list_page.dart';
 
 class SearchPage extends StatelessWidget {
   @override
@@ -24,11 +27,11 @@ class _SearchPageBodyState extends State<SearchPageBody> {
 
   TextEditingController _controller;
 
-  String changedText;
+  String changedText ='';
 
   String pickedMenuValue = 'singer';
 
-  List searchHistory;
+  List searchHistory =[];
 
   @override
   void initState() {
@@ -145,8 +148,31 @@ class _SearchPageBodyState extends State<SearchPageBody> {
     print(_controller.text);
     if(_controller.text != null && _controller.text !=''){
       addHistory();
+      jump_route();
     }
   }
+
+
+  void jump_route(){
+    switch(pickedMenuValue){
+      case 'singer':
+        Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+          return SingerListPage(keyword:_controller.text.toString());
+        }));
+        break;
+      case 'song':
+        Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+          return SongListPage(keyword:_controller.text.toString());
+        }));
+        break;
+      case 'cd':
+        Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+          return CdListPage(keyword:_controller.text.toString());
+        }));
+        break;
+    }
+  }
+
 
   void addHistory() async{
     var res = await SearchHistoryData().addOne(_controller.text);

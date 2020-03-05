@@ -4,16 +4,14 @@ class SearchHistoryData{
 
   int maxCount = 20;
   String keyname = 'SearchHistoryData';
-  List _list;
+  List<String> _list = [];
 
   Future<List> addOne(String keyword) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    getAll();
-
+    _list = await getAll();
     if(ListUtil().in_array(keyword, _list)){
       return _list;
     }
-
     if(_list != null && _list.length>maxCount){
       _list = _list.sublist(0,-(maxCount -1));
     }

@@ -9,9 +9,12 @@ import 'dart:async';
 class SongListPage extends StatelessWidget {
 
   String singer_id;
+  String keyword;
+
 
   SongListPage({
     this.singer_id,
+    this.keyword,
 });
 
   @override
@@ -28,7 +31,7 @@ class SongListPage extends StatelessWidget {
           ),
         ],
       ),
-      body: SongListPageBody(singer_id: this.singer_id,),
+      body: SongListPageBody(singer_id: this.singer_id,keyword:keyword),
     );
   }
 }
@@ -36,9 +39,10 @@ class SongListPage extends StatelessWidget {
 class SongListPageBody extends StatefulWidget {
 
   String singer_id;
-
+  String keyword;
   SongListPageBody({
     this.singer_id,
+    this.keyword,
 });
 
   @override
@@ -184,6 +188,9 @@ class _SongListPageBodyState extends State<SongListPageBody> {
 
     if(widget.singer_id != null && widget.singer_id !=''){
       _map['singer_id'] = widget.singer_id;
+    }
+    if(widget.keyword != null && widget.keyword !=''){
+      _map['name'] = widget.keyword;
     }
 
     var data = await MusicApi().getSongListData(_map);

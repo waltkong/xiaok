@@ -4,6 +4,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'dart:async';
 import 'package:xiaokmusic/apis/music_api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:xiaokmusic/pages/music/cd_one_page.dart';
 
 class CdListPage extends StatelessWidget {
   @override
@@ -11,6 +12,14 @@ class CdListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('专辑'),
+        actions: <Widget>[
+          InkWell(
+            onTap: (){
+              Navigator.of(context).pushNamed('search_page');
+            },
+            child: Icon(Icons.search),
+          ),
+        ],
       ),
       body: CdListPageBody(),
     );
@@ -116,7 +125,13 @@ class _CdListPageBodyState extends State<CdListPageBody> {
 
   Widget cdBoxItem(item){
     return GestureDetector(
-      onTap: (){},
+      onTap: (){
+
+        Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+          return CdOnePage(id:item['id'].toString());
+        }));
+
+      },
       child: Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

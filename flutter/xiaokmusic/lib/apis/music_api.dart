@@ -85,4 +85,17 @@ class MusicApi extends BaseApi{
   }
 
 
+  Future getCdOne(String id) async{
+    var _map = {
+      'id':id,
+    };
+    var data = BaseApi.getFullRequestData(_map);
+    String url = BaseApi.getFullUrl('/api/music/data/cd_one');
+    var res = await HttpUtil().postHttp(url, data);
+
+    final _data = json.decode(res.toString());
+    return _data;
+  }
+
+
 }

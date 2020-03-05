@@ -81,6 +81,41 @@ class DataLogic{
         return $default;
     }
 
+    public function cd_one($input){
+        $id = $input['id'] ?? '';
+        $obj = new Cd_model();
+        $row = $obj->where('id',$id)->find();
+
+        if(!empty($row)){
+            $row['image'] = UrlUtil::getFullUrl($row['image']);
+            $singerRow = Singer_model::where('id',$row['singer_id'])->find();
+            $row['singer_name'] = $singerRow['name'];
+            $row['singer_image'] = UrlUtil::getFullUrl($singerRow['one_image']);
+        }
+
+        $list = [];
+        if($id > 0){
+            $list =  (new Song_model())->where('cd_id',$id)->select();
+
+            $list = collection($list)->toArray();
+            $cdMap = MusicRepository::getCdIdNameMap(array_column($list,'cd_id'));
+            foreach ($list as $k => $item){
+                $list[$k]['image'] = UrlUtil::getFullUrl($item['image']);
+
+                $list[$k]['voice_url'] = UrlUtil::getFullUrl($item['voice_url']);
+                $list[$k]['vedio_url'] = UrlUtil::getFullUrl($item['vedio_url']);
+
+                $list[$k]['cd_name'] = $cdMap[$item['cd_id']] ?? '';
+
+                $list[$k]['createtime'] = date('Y-m-d',$item['createtime']);
+            }
+        }
+        return [
+            'cd_row' => $row ?? [],
+            'song_list' => $list ?? [],
+        ];
+    }
+
 
     public function song_list($input,$pageIndex,$eachPage){
         $default = [
@@ -93,6 +128,9 @@ class DataLogic{
             $obj = new Song_model();
             if(!empty($input['is_recommend'])){
                 $obj = $obj->where('is_recommend',$input['is_recommend']);
+            }
+            if(!empty($input['singer_id'])){
+                $obj = $obj->where('singer_id',$input['singer_id']);
             }
             return $obj;
         };

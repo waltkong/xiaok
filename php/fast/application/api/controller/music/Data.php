@@ -56,6 +56,12 @@ class Data extends Common{
         $this->success('ok',$data);
     }
 
+    public function cd_one(){
+        $input = $this->req;
+        $data = $this->logic->cd_one($input);
+        $this->success('ok',$data);
+    }
+
 
 
 }

@@ -11,6 +11,14 @@ class SingerListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('歌手'),
+        actions: <Widget>[
+          InkWell(
+            onTap: (){
+              Navigator.of(context).pushNamed('search_page');
+            },
+            child: Icon(Icons.search),
+          ),
+        ],
       ),
       body: SingerListPageBody(),
     );

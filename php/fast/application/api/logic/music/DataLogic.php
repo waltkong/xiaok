@@ -178,10 +178,33 @@ class DataLogic{
     }
 
 
+    public function song_one($input){
+        $id = $input['id'] ?? '';
+        $obj = new Song_model();
+        $row = $obj->where('id',$id)->find();
+        if(!empty($row)){
+
+            $singerMap = MusicRepository::getSingerIdNameMap($row['singer_id']);
+            $cdMap = MusicRepository::getCdIdNameMap($row['cd_id']);
+
+            $row['image'] = UrlUtil::getFullUrl($row['image']);
+            $row['voice_url'] = UrlUtil::getFullUrl($row['voice_url']);
+            $row['vedio_url'] = UrlUtil::getFullUrl($row['vedio_url']);
+            $row['singer_name'] = $singerMap[$row['singer_id']] ?? '';
+            $row['cd_name'] = $cdMap[$row['cd_id']] ?? '';
+
+        }
+        return [
+            'song_row' => $row ?? [],
+        ];
+    }
+
+
     public function singer_one($input){
         $id = $input['id'] ?? '';
         $obj = new Singer_model();
         $row = $obj->where('id',$id)->find();
+
 
         if(!empty($row)){
             $row['one_image'] = UrlUtil::getFullUrl($row['one_image']);

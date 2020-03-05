@@ -68,6 +68,13 @@ class Data extends Common{
         $this->success('ok',$data);
     }
 
+    public function song_one(){
+        $input = $this->req;
+        $data = $this->logic->song_one($input);
+        $this->success('ok',$data);
+    }
+
+
 
 
 

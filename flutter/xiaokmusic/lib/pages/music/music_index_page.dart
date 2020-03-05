@@ -11,6 +11,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:xiaokmusic/apis/music_api.dart';
 import 'package:xiaokmusic/pages/music/cd_one_page.dart';
 
+import 'package:xiaokmusic/pages/songplayer/song_index_page.dart';
+
 class MusicIndexPage extends StatefulWidget {
   @override
   _MusicIndexPageState createState() => _MusicIndexPageState();
@@ -444,21 +446,11 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
         ),
         trailing: Text(item['createtime']),
         onTap: (){
-          if(playObj['play_or_stop'] == 'stop'){
-            play(item['voice_url']);
-            playObj['play_or_stop'] = 'play';
-            playObj['voice_url'] = item['voice_url'];
-          }else{
-            if(playObj['voice_url'] == item['voice_url']){
-              pause();
-              playObj['play_or_stop'] = 'stop';
-            }else{
-              pause();
-              play(item['voice_url']);
-              playObj['play_or_stop'] = 'play';
-              playObj['voice_url'] = item['voice_url'];
-            }
-          }
+
+          Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+            return SongIndexPage(id:item['id'].toString());
+          }));
+
         },
       ),
     );

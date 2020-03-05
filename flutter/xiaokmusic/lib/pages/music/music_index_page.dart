@@ -437,14 +437,13 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
           width: ScreenUtil().setWidth(120),
           height: ScreenUtil().setHeight(230),
         ),
-        title: Text(item['name']),
+        title: Text("${item['name']}",overflow: TextOverflow.ellipsis,),
         subtitle: Row(
           children: <Widget>[
-            Text("${item['singer_name']}-"),
-            Text("${item['cd_name']}"),
+            Text("${item['singer_name']} - ${item['cd_name']}",overflow: TextOverflow.ellipsis,),
           ],
         ),
-        trailing: Text(item['createtime']),
+        trailing: IconButton(icon: Icon(Icons.more_vert), onPressed: (){}),
         onTap: (){
 
           Navigator.of(context).push(new MaterialPageRoute(builder: (_) {

@@ -4,7 +4,7 @@ import 'package:xiaokmusic/apis/music_api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'dart:async';
-
+import 'package:xiaokmusic/pages/songplayer/song_index_page.dart';
 
 class SongListPage extends StatelessWidget {
 
@@ -144,7 +144,11 @@ class _SongListPageBodyState extends State<SongListPageBody> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           GestureDetector(
-            onTap: (){},
+            onTap: (){
+              Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+                return SongIndexPage(id:item['id'].toString());
+              }));
+            },
             child: Container(
               padding: EdgeInsets.only(bottom:3),
               height: ScreenUtil().setHeight(100),
@@ -161,7 +165,7 @@ class _SongListPageBodyState extends State<SongListPageBody> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                trailing: Icon(Icons.arrow_forward),
+                trailing: IconButton(icon: Icon(Icons.more_vert), onPressed: (){}),
               ),
             ),
           ),

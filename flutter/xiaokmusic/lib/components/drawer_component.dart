@@ -34,24 +34,24 @@ class _DrawerComponentState extends State<DrawerComponent> {
             trailing: Icon(Icons.navigate_next),
           ),
 
-          Divider(
-            height: 1,
-          ),
-
-          ListTile(
-            leading: Icon(Icons.ac_unit),
-            title: Text(
-              '设置', style: TextStyle(fontSize: 20,color: highLightIndex==1? Colors.blue : Colors.black),
-            ),
-
-            onTap: (){
-              setState(() {
-                highLightIndex = 1;
-              });
-              Navigator.of(context).pushNamed('config_page');
-            },
-            trailing: Icon(Icons.navigate_next),
-          ),
+//          Divider(
+//            height: 1,
+//          ),
+//
+//          ListTile(
+//            leading: Icon(Icons.ac_unit),
+//            title: Text(
+//              '设置', style: TextStyle(fontSize: 20,color: highLightIndex==1? Colors.blue : Colors.black),
+//            ),
+//
+//            onTap: (){
+//              setState(() {
+//                highLightIndex = 1;
+//              });
+//              Navigator.of(context).pushNamed('config_page');
+//            },
+//            trailing: Icon(Icons.navigate_next),
+//          ),
 
 
           Divider(

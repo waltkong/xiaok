@@ -5,6 +5,9 @@ import 'dart:async';
 import 'package:xiaokmusic/apis/music_api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xiaokmusic/utils/number_util.dart';
+import 'package:xiaokmusic/pages/music/singer_one_page.dart';
+
+
 class CdOnePage extends StatelessWidget {
 
   String id;
@@ -106,7 +109,15 @@ class _CdOnePageBodyState extends State<CdOnePageBody> {
                         ],
                       ),
 
-                      IconButton(icon: Icon(Icons.arrow_forward), onPressed: (){}),
+                      IconButton(icon: Icon(Icons.arrow_forward), onPressed: (){
+
+                        if(cd != null){
+                          Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+                            return SingerOnePage(id:cd['singer_id'].toString());
+                          }));
+                        }
+
+                      }),
 
                     ],
                   ),

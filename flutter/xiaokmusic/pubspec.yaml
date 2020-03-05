@@ -19,7 +19,9 @@ dependencies:
   flutter_easyrefresh: ^1.2.7
   flutter_html: ^0.9.6
   audioplayers: ^0.13.1
+  shared_preferences: ^0.4.1
 
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

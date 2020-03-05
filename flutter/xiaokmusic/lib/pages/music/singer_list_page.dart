@@ -3,7 +3,7 @@ import 'package:xiaokmusic/apis/music_api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'dart:async';
-
+import 'package:xiaokmusic/pages/music/singer_one_page.dart';
 
 class SingerListPage extends StatelessWidget {
   @override
@@ -123,7 +123,11 @@ class _SingerListPageBodyState extends State<SingerListPageBody> {
     return Column(
       children: <Widget>[
         GestureDetector(
-          onTap: (){},
+          onTap: (){
+            Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+              return SingerOnePage(id:item['id'].toString());
+            }));
+          },
           child: Container(
             child: ListTile(
               leading: CircleAvatar(

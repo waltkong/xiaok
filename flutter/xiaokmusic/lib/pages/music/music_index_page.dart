@@ -9,6 +9,7 @@ import 'package:xiaokmusic/components/banner_component.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 import 'package:xiaokmusic/apis/music_api.dart';
+import 'package:xiaokmusic/pages/music/cd_one_page.dart';
 
 class MusicIndexPage extends StatefulWidget {
   @override
@@ -316,7 +317,7 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
                 padding: EdgeInsets.all(8),
                 child: FlatButton(
                   onPressed: (){
-
+                    Navigator.of(context).pushNamed('cd_list');
                   },
                   child: Text('更多...',),
                 ),
@@ -347,19 +348,26 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
 
 
   Widget _recommendBoxItem(item){
-    return Column(
-      children: <Widget>[
-        Image.network(
-          item['image'],
-          width: ScreenUtil().setWidth(210),
-          height: ScreenUtil().setHeight(160),
-          fit: BoxFit.cover,
-        ),
-        Text(
-          item['name'],
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
+    return GestureDetector(
+      onTap: (){
+        Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+          return CdOnePage(id:item['id'].toString());
+        }));
+      },
+      child: Column(
+        children: <Widget>[
+          Image.network(
+            item['image'],
+            width: ScreenUtil().setWidth(210),
+            height: ScreenUtil().setHeight(160),
+            fit: BoxFit.cover,
+          ),
+          Text(
+            item['name'],
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
     );
   }
 
@@ -396,7 +404,7 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
                 padding: EdgeInsets.all(8),
                 child: FlatButton(
                   onPressed: (){
-
+                    Navigator.of(context).pushNamed('song_list');
                   },
                   child: Text('更多...',),
                 ),

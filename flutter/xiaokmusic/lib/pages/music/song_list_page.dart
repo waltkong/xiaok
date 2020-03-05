@@ -7,6 +7,13 @@ import 'dart:async';
 
 
 class SongListPage extends StatelessWidget {
+
+  String singer_id;
+
+  SongListPage({
+    this.singer_id,
+});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,12 +28,19 @@ class SongListPage extends StatelessWidget {
           ),
         ],
       ),
-      body: SongListPageBody(),
+      body: SongListPageBody(singer_id: this.singer_id,),
     );
   }
 }
 
 class SongListPageBody extends StatefulWidget {
+
+  String singer_id;
+
+  SongListPageBody({
+    this.singer_id,
+});
+
   @override
   _SongListPageBodyState createState() => _SongListPageBodyState();
 }
@@ -167,6 +181,11 @@ class _SongListPageBodyState extends State<SongListPageBody> {
       'eachPage':eachPage.toString(),
       'pageIndex':pageIndex.toString(),
     };
+
+    if(widget.singer_id != null && widget.singer_id !=''){
+      _map['singer_id'] = widget.singer_id;
+    }
+
     var data = await MusicApi().getSongListData(_map);
     var _songdata = data['data']['data'];
     setState(() {

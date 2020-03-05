@@ -172,6 +172,41 @@ class DataLogic{
     }
 
 
+    public function singer_one($input){
+        $id = $input['id'] ?? '';
+        $obj = new Singer_model();
+        $row = $obj->where('id',$id)->find();
+
+        if(!empty($row)){
+            $row['one_image'] = UrlUtil::getFullUrl($row['one_image']);
+        }
+
+        $list = [];
+
+        if($id > 0){
+            $list =  (new Song_model())->where('singer_id',$id)->order('createtime', 'desc')
+                ->limit(0,8)->select();   //只推荐8个
+
+            $list = collection($list)->toArray();
+            $cdMap = MusicRepository::getCdIdNameMap(array_column($list,'cd_id'));
+            foreach ($list as $k => $item){
+                $list[$k]['image'] = UrlUtil::getFullUrl($item['image']);
+
+                $list[$k]['voice_url'] = !empty($item['voice_url']) ? UrlUtil::getFullUrl($item['voice_url']) : '';
+                $list[$k]['vedio_url'] = !empty($item['vedio_url']) ? UrlUtil::getFullUrl($item['vedio_url']) : '';
+
+                $list[$k]['cd_name'] = $cdMap[$item['cd_id']] ?? '';
+
+                $list[$k]['createtime'] = date('Y-m-d',$item['createtime']);
+            }
+        }
+        return [
+            'singer_row' => $row ?? [],
+            'song_list' => $list ?? [],
+        ];
+    }
+
+
     public function singer_list($input,$pageIndex,$eachPage){
         $default = [
             'data' => [],

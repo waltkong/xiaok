@@ -4,7 +4,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'dart:async';
 import 'package:xiaokmusic/apis/music_api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:xiaokmusic/utils/number_util.dart';
 class CdOnePage extends StatelessWidget {
 
   String id;
@@ -117,13 +117,13 @@ class _CdOnePageBodyState extends State<CdOnePageBody> {
                       Column(
                         children: <Widget>[
                           Icon(Icons.favorite_border),
-                          Text('1234'),
+                          Text(NumberUtil().randomNumber(4)),
                         ],
                       ),
                       Column(
                         children: <Widget>[
                           Icon(Icons.message),
-                          Text('125'),
+                          Text(NumberUtil().randomNumber(3)),
                         ],
                       ),
                       Column(
@@ -176,7 +176,7 @@ class _CdOnePageBodyState extends State<CdOnePageBody> {
 
   Widget _songListBox(){
 
-    if(songList == null) { return Container(child: Text('加载中..'),);}
+    if(songList == null) { return Container(child: Text(''),);}
 
     List<Widget> ret = songList.map((item) => _songListBoxItem(item)).toList();
 

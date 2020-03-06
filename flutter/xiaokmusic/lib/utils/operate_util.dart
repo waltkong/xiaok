@@ -15,9 +15,16 @@ class OperateUtil{
   }
 
   //每首歌对应的一些按钮模态框
-  Future openBottomModalSheet(context,String id,String name, String voice_url) async {
+  Future openBottomModalSheet(context,Map _map) async {
     final option = await showModalBottomSheet(context: context, builder: (BuildContext context){
-      return SongModalSheetComponent(id:id,name:name,voice_url:voice_url);
+      return SongModalSheetComponent(
+        id:_map['id'],
+        name:_map['name'],
+        voice_url:_map['voice_url'],
+        singer_name: _map['singer_name'],
+        image: _map['image'],
+        cd_name: _map['cd_name'],
+      );
     });
     return option;
   }

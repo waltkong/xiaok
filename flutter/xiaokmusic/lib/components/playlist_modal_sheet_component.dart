@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -37,9 +38,10 @@ class _PlaylistModalSheetComponentState extends State<PlaylistModalSheetComponen
 
     List<Widget> ret = _nowPlayList.map((item){
       return Container(
+        height: ScreenUtil().setHeight(60),
         child: ListTile(
-          leading: Text("${item['name']}"),
-          title: Text("${item['singer_name']}"),
+          leading: Text("${item['name']}",overflow: TextOverflow.ellipsis,),
+          title: Text("${item['singer_name']}",style: TextStyle(fontSize: 13),overflow: TextOverflow.ellipsis,),
           trailing: IconButton(
             icon: Icon(Icons.close), onPressed: (){
               _stateProvider.deleteOnePlayList(item['id'].toString());
@@ -83,7 +85,6 @@ class _PlaylistModalSheetComponentState extends State<PlaylistModalSheetComponen
         children: <Widget>[
           GestureDetector(
             onTap: (){
-              print(_playMode);
               if(_playMode ==  PlayerType.orderPlay) {
                 _stateProvider.setPlayMode(PlayerType.randomPlay);return;
               }

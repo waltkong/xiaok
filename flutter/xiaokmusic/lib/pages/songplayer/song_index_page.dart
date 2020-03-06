@@ -7,9 +7,21 @@ import 'package:xiaokmusic/components/song_player_component.dart';
 
 class SongIndexPage extends StatefulWidget {
 
-  String id;
+  String id = '';
+  String name = '';
+  String image = '';
+  String voice_url = '';
+  String cd_name = '';
+  String singer_name = '';
+
+
   SongIndexPage({
-    this.id
+    @required this.id,
+    @required this.name,
+    @required this.image,
+    @required this.voice_url,
+    @required this.cd_name,
+    @required this.singer_name,
 });
 
   @override
@@ -30,7 +42,7 @@ class _SongIndexPageState extends State<SongIndexPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(song==null?'':song['name']),
+        title: Text("${widget.name}"),
       ),
       body: Container(
         color: Colors.cyanAccent,
@@ -42,11 +54,6 @@ class _SongIndexPageState extends State<SongIndexPage> {
 
 
   Widget _bodyWidget(){
-    if(song == null) {
-      return Center(
-        child: Text('加载中..'),
-      );
-    }
     return Stack(
       children: <Widget>[
 
@@ -57,7 +64,7 @@ class _SongIndexPageState extends State<SongIndexPage> {
             children: <Widget>[
 
               Container(
-                child: Text("${song['singer_name']} - ${song['cd_name']}",
+                child: Text( "${widget.singer_name} - ${widget.cd_name}",
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontSize: 14,),
                 ),
@@ -65,7 +72,7 @@ class _SongIndexPageState extends State<SongIndexPage> {
 
               Container(
                 margin: EdgeInsets.only(top:10,bottom: 10),
-                child: Image.network(song['image'],
+                child: Image.network("${widget.image}",
                   width: ScreenUtil().setWidth(650),
                   height: ScreenUtil().setHeight(400),
                   fit: BoxFit.cover,
@@ -79,7 +86,7 @@ class _SongIndexPageState extends State<SongIndexPage> {
 
                     Container(
                       padding: EdgeInsets.only(left: 30,right: 30),
-                      child: Text("  ${song['lyric']}"),
+                      child: Text(song==null? '加载中...' : " ${song['lyric']}"),
                     ),
                   ],
                 ),
@@ -131,11 +138,11 @@ class _SongIndexPageState extends State<SongIndexPage> {
         Positioned(
           bottom: 0,
           child: SongPlayerComponent(
-            id: song['id'].toString(),
-            name: song['name'].toString(),
-            image: song['image'].toString(),
-            voice_url: song['voice_url'].toString(),
-            singer_name: song['singer_name'].toString(),
+            id: widget.id.toString(),
+            name: widget.name.toString(),
+            image: widget.image.toString(),
+            voice_url: widget.voice_url.toString(),
+            singer_name: widget.singer_name.toString(),
           ),
         ),
 

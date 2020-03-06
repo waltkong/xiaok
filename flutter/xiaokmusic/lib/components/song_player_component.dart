@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xiaokmusic/utils/operate_util.dart';
 
+import 'package:provider/provider.dart';
+import 'package:xiaokmusic/statemodels/base_state_model.dart';
 
 class SongPlayerComponent extends StatefulWidget {
 
@@ -27,6 +29,11 @@ class SongPlayerComponent extends StatefulWidget {
 class _SongPlayerComponentState extends State<SongPlayerComponent> {
   @override
   Widget build(BuildContext context) {
+
+    BaseStateModel _stateProvider = Provider.of<BaseStateModel>(context);
+
+    Map _nowPlayMap = _stateProvider.nowPlayStatusMap;
+
     return Container(
       height: ScreenUtil().setHeight(120),
       child: Row(
@@ -38,7 +45,7 @@ class _SongPlayerComponentState extends State<SongPlayerComponent> {
               Container(
                 width: ScreenUtil().setWidth(130),
                 padding: EdgeInsets.all(3),
-                child: Image.network(
+                child: widget.image == '' ? Icon(Icons.music_note) : Image.network(
                   widget.image,
                   fit: BoxFit.cover,
                 ),
@@ -64,8 +71,11 @@ class _SongPlayerComponentState extends State<SongPlayerComponent> {
               ),
 
               IconButton(
-                icon: Icon(Icons.play_arrow),  //pause
-                onPressed: (){},
+                icon: _nowPlayMap['id']==widget.id && _nowPlayMap['is_play'] ? Icon(Icons.pause) : Icon(Icons.play_arrow),  //pause
+                onPressed: (){
+                  //todo
+
+                },
               ),
 
               IconButton(

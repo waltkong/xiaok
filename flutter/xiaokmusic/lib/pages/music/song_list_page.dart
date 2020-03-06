@@ -146,7 +146,14 @@ class _SongListPageBodyState extends State<SongListPageBody> {
           GestureDetector(
             onTap: (){
               Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
-                return SongIndexPage(id:item['id'].toString());
+                return SongIndexPage(
+                  id:item['id'].toString(),
+                  name: item['name'].toString(),
+                  image: item['image'].toString(),
+                  voice_url: item['voice_url'].toString(),
+                  cd_name: item['cd_name'].toString(),
+                  singer_name: item['singer_name'].toString(),
+                );
               }));
             },
             child: Container(

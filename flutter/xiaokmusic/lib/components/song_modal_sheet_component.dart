@@ -3,16 +3,25 @@ import 'dart:async';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:provider/provider.dart';
+import 'package:xiaokmusic/statemodels/base_state_model.dart';
+
 class SongModalSheetComponent extends StatefulWidget {
 
   String id;
   String name;
+  String image;
+  String singer_name;
+  String cd_name;
   String voice_url;
 
   SongModalSheetComponent({
-    this.id,
-    this.name,
-    this.voice_url
+    @required this.id,
+    @required this.image,
+    @required this.singer_name,
+    @required this.cd_name,
+    @required this.name,
+    @required this.voice_url,
 });
 
 
@@ -24,6 +33,9 @@ class _SongModalSheetComponentState extends State<SongModalSheetComponent> {
 
   @override
   Widget build(BuildContext context) {
+
+    BaseStateModel _stateProvider = Provider.of<BaseStateModel>(context);
+
     return Container(
       height: ScreenUtil().setHeight(400),
       child: ListView(
@@ -49,7 +61,7 @@ class _SongModalSheetComponentState extends State<SongModalSheetComponent> {
           Wrap(
             spacing: 5,
             runSpacing: 5,
-            children: _itemList(),
+            children: _itemList(_stateProvider),
           ),
 
         ],
@@ -57,23 +69,53 @@ class _SongModalSheetComponentState extends State<SongModalSheetComponent> {
     );
   }
 
-  List<Widget> _itemList(){
+  List<Widget> _itemList(_stateProvider){
     return [
-      this._eachItemWidget('播放',Icon(Icons.play_circle_filled),'play'),
-      this._eachItemWidget('下一首播放',Icon(Icons.queue_play_next),'next_play'),
-      this._eachItemWidget('加到歌单',Icon(Icons.add_to_photos),'add_to_cd'),
-      this._eachItemWidget('收藏',Icon(Icons.favorite_border),'like'),
-      this._eachItemWidget('评论',Icon(Icons.insert_comment),'comment'),
-      this._eachItemWidget('下载',Icon(Icons.file_download),'download'),
-      this._eachItemWidget('分享',Icon(Icons.share),'share'),
-      this._eachItemWidget('歌手详情',Icon(Icons.person),'singer_detail'),
+      this._eachItemWidget(_stateProvider,'播放',Icon(Icons.play_circle_filled),'play'),
+      this._eachItemWidget(_stateProvider,'下一首播放',Icon(Icons.queue_play_next),'next_play'),
+      this._eachItemWidget(_stateProvider,'加到歌单',Icon(Icons.add_to_photos),'add_to_cd'),
+      this._eachItemWidget(_stateProvider,'收藏',Icon(Icons.favorite_border),'like'),
+      this._eachItemWidget(_stateProvider,'评论',Icon(Icons.insert_comment),'comment'),
+      this._eachItemWidget(_stateProvider,'下载',Icon(Icons.file_download),'download'),
+      this._eachItemWidget(_stateProvider,'分享',Icon(Icons.share),'share'),
+      this._eachItemWidget(_stateProvider,'歌手详情',Icon(Icons.person),'singer_detail'),
     ];
   }
 
 
-  Widget _eachItemWidget(String str,Icon _icon,String flag){
+  void _listenThisItemTap(String flag,BaseStateModel _stateProvider){
+
+    print(flag);
+
+    switch(flag){
+      case 'play':
+        _stateProvider.addOneToPlayList({
+          'id':widget.id,
+          'image':widget.image,
+          'name':widget.name,
+          'singer_name':widget.singer_name,
+          'cd_name':widget.cd_name,
+          'voice_url':widget.voice_url,
+        },'head');
+        break;
+      case 'next_play':
+        _stateProvider.addOneToPlayList({
+          'id':widget.id,
+          'image':widget.image,
+          'name':widget.name,
+          'singer_name':widget.singer_name,
+          'cd_name':widget.cd_name,
+          'voice_url':widget.voice_url,
+        },'next');
+        break;
+    }
+  }
+
+  Widget _eachItemWidget(BaseStateModel _stateProvider,String str,Icon _icon,String flag){
+
     return GestureDetector(
       onTap: (){
+        _listenThisItemTap(flag,_stateProvider);
         Navigator.of(context).pop(flag);
       },
       child: Container(

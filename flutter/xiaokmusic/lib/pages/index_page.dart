@@ -69,6 +69,14 @@ class _IndexPageState extends State<IndexPage> {
       drawer: Drawer(
         child: DrawerComponent(),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+
+        },
+        child: Icon(Icons.music_note),
+        backgroundColor: Colors.cyan,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
     );
 

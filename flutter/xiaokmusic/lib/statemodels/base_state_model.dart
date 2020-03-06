@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:xiaokmusic/models/all_enum.dart';
+import 'package:xiaokmusic/utils/list_util.dart';
 
 class BaseStateModel extends ChangeNotifier{
 
   //当前播放器
   Map<String,dynamic> nowPlayStatusMap = {
-    'show_player': false,
     'is_play': false,
     'id':'',
     'image':'',
@@ -46,14 +46,21 @@ class BaseStateModel extends ChangeNotifier{
   List nowPlayList = [];
 
   //往播放器播放列表添加一条数据
-  void addOneToPlayList(Map _map, {String position='head'}){
+  void addOneToPlayList(Map _map, String position){
+    if(ListUtil().in_map_list(_map['id'], 'id', nowPlayList)){
+      return;
+    }
     // position => head头 next下一个 tail最后
     switch(position){
       case 'head':
         nowPlayList.insert(0, _map);
         break;
       case 'next':
-        nowPlayList.insert(1, _map);
+        if(nowPlayList.length>0){
+          nowPlayList.insert(1, _map);
+        }else{
+          nowPlayList.insert(0, _map);
+        }
         break;
       case 'tail':
         nowPlayList.add(_map);

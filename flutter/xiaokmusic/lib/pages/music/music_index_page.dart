@@ -447,13 +447,27 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
         trailing: IconButton(
           icon: Icon(Icons.more_vert),
           onPressed: (){
-            OperateUtil().openBottomModalSheet(context, item['id'].toString(), item['name'].toString(), item['voice_url'].toString());
+            OperateUtil().openBottomModalSheet(context, {
+              'id': item['id'].toString(),
+              'name': item['name'].toString(),
+              'image': item['image'].toString(),
+              'singer_name': item['singer_name'].toString(),
+              'cd_name': item['cd_name'].toString(),
+              'voice_url': item['voice_url'].toString(),
+            });
           },
         ),
         onTap: (){
 
           Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
-            return SongIndexPage(id:item['id'].toString());
+            return SongIndexPage(
+                id:item['id'].toString(),
+                name: item['name'].toString(),
+                image: item['image'].toString(),
+                voice_url: item['voice_url'].toString(),
+                cd_name: item['cd_name'].toString(),
+                singer_name: item['singer_name'].toString(),
+            );
           }));
 
         },

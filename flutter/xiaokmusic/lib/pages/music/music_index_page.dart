@@ -12,6 +12,7 @@ import 'package:xiaokmusic/apis/music_api.dart';
 import 'package:xiaokmusic/pages/music/cd_one_page.dart';
 
 import 'package:xiaokmusic/pages/songplayer/song_index_page.dart';
+import 'package:xiaokmusic/utils/operate_util.dart';
 
 class MusicIndexPage extends StatefulWidget {
   @override
@@ -443,7 +444,12 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
             Text("${item['singer_name']} - ${item['cd_name']}",overflow: TextOverflow.ellipsis,),
           ],
         ),
-        trailing: IconButton(icon: Icon(Icons.more_vert), onPressed: (){}),
+        trailing: IconButton(
+          icon: Icon(Icons.more_vert),
+          onPressed: (){
+            OperateUtil().openBottomModalSheet(context, item['id'].toString(), item['name'].toString(), item['voice_url'].toString());
+          },
+        ),
         onTap: (){
 
           Navigator.of(context).push(new MaterialPageRoute(builder: (_) {

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:xiaokmusic/utils/operate_util.dart';
+
 
 class SongPlayerComponent extends StatefulWidget {
 
@@ -73,7 +75,9 @@ class _SongPlayerComponentState extends State<SongPlayerComponent> {
 
               IconButton(
                 icon: Icon(Icons.assignment),
-                onPressed: (){},
+                onPressed: (){
+                  OperateUtil().openSongListModal(context);
+                },
               ),
             ],
           ),

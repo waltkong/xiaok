@@ -52,6 +52,7 @@ class CdListPage extends StatelessWidget {
               image: _nowPlayStatusMap['image'].toString(),
               voice_url: _nowPlayStatusMap['voice_url'].toString(),
               singer_name: _nowPlayStatusMap['singer_name'].toString(),
+              cd_name: _nowPlayStatusMap['cd_name'].toString(),
             ),
           ),
 

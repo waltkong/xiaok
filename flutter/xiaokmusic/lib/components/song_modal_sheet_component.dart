@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:provider/provider.dart';
 import 'package:xiaokmusic/statemodels/base_state_model.dart';
+import 'package:xiaokmusic/utils/audio_player_util.dart';
 
 class SongModalSheetComponent extends StatefulWidget {
 
@@ -83,20 +84,35 @@ class _SongModalSheetComponentState extends State<SongModalSheetComponent> {
   }
 
 
-  void _listenThisItemTap(String flag,BaseStateModel _stateProvider){
+  void _listenThisItemTap(String flag,BaseStateModel _stateProvider) async{
 
     print(flag);
 
     switch(flag){
       case 'play':
-        _stateProvider.addOneToPlayList({
-          'id':widget.id,
-          'image':widget.image,
-          'name':widget.name,
-          'singer_name':widget.singer_name,
-          'cd_name':widget.cd_name,
-          'voice_url':widget.voice_url,
-        },'head');
+        var playerRes = await AudioPlayerUtil().play(widget.voice_url);
+        if(playerRes){
+          _stateProvider.addOneToPlayList({
+            'id':widget.id,
+            'image':widget.image,
+            'name':widget.name,
+            'singer_name':widget.singer_name,
+            'cd_name':widget.cd_name,
+            'voice_url':widget.voice_url,
+          },'head');
+
+          _stateProvider.setNowPlayStatusMap({
+            'is_play':true,
+            'id': widget.id,
+            'image':widget.image,
+            'name':widget.name,
+            'singer_name':widget.singer_name,
+            'cd_name':widget.cd_name,
+            'voice_url':widget.voice_url,
+          });
+          Navigator.of(context).pop(flag);
+        }
+
         break;
       case 'next_play':
         _stateProvider.addOneToPlayList({
@@ -107,6 +123,7 @@ class _SongModalSheetComponentState extends State<SongModalSheetComponent> {
           'cd_name':widget.cd_name,
           'voice_url':widget.voice_url,
         },'next');
+        Navigator.of(context).pop(flag);
         break;
     }
   }
@@ -116,7 +133,6 @@ class _SongModalSheetComponentState extends State<SongModalSheetComponent> {
     return GestureDetector(
       onTap: (){
         _listenThisItemTap(flag,_stateProvider);
-        Navigator.of(context).pop(flag);
       },
       child: Container(
         width: ScreenUtil().setWidth(180),

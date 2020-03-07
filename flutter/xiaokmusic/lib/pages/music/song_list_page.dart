@@ -9,6 +9,7 @@ import 'package:xiaokmusic/pages/songplayer/song_index_page.dart';
 import 'package:provider/provider.dart';
 import 'package:xiaokmusic/statemodels/base_state_model.dart';
 import 'package:xiaokmusic/components/song_player_component.dart';
+import 'package:xiaokmusic/utils/operate_util.dart';
 
 class SongListPage extends StatelessWidget {
 
@@ -55,6 +56,7 @@ class SongListPage extends StatelessWidget {
               image: _nowPlayStatusMap['image'].toString(),
               voice_url: _nowPlayStatusMap['voice_url'].toString(),
               singer_name: _nowPlayStatusMap['singer_name'].toString(),
+              cd_name: _nowPlayStatusMap['cd_name'].toString(),
             ),
           ),
 
@@ -200,7 +202,16 @@ class _SongListPageBodyState extends State<SongListPageBody> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                trailing: IconButton(icon: Icon(Icons.more_vert), onPressed: (){}),
+                trailing: IconButton(icon: Icon(Icons.more_vert), onPressed: (){
+                  OperateUtil().openBottomModalSheet(context, {
+                    'id': item['id'].toString(),
+                    'name': item['name'].toString(),
+                    'image': item['image'].toString(),
+                    'singer_name': item['singer_name'].toString(),
+                    'cd_name': item['cd_name'].toString(),
+                    'voice_url': item['voice_url'].toString(),
+                  });
+                }),
               ),
             ),
           ),

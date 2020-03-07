@@ -151,6 +151,9 @@ class _SongIndexPageState extends State<SongIndexPage> {
   }
 
   void getSongOne() async{
+    if(widget.id == null || widget.id==''){
+      return ;
+    }
     var data = await MusicApi().getSongOne(widget.id.toString());
     var _songdata = data['data']['song_row'];
     setState(() {

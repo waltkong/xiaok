@@ -6,8 +6,6 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xiaokmusic/components/banner_component.dart';
 
-import 'package:audioplayers/audioplayers.dart';
-
 import 'package:xiaokmusic/apis/music_api.dart';
 import 'package:xiaokmusic/pages/music/cd_one_page.dart';
 
@@ -29,10 +27,6 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
 
   var new_song_list =[];
 
-  AudioPlayer audioPlayer;
-
-  var playObj;
-
   List recommendCdList = [];
 
   @override
@@ -44,13 +38,6 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
     getRecommendCdList();
 
     getNewSongList();
-
-    audioPlayer = AudioPlayer();
-
-    playObj = {
-      'play_or_stop':'stop',
-      'voice_url':'',
-    };
 
   }
 
@@ -99,13 +86,6 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
 
   @override
   void deactivate() async{
-    print('结束');
-    int result = await audioPlayer.release();
-    if (result == 1) {
-      print('release success');
-    } else {
-      print('release failed');
-    }
     super.deactivate();
   }
 
@@ -474,29 +454,5 @@ class _MusicIndexPageState extends State<MusicIndexPage> {
       ),
     );
   }
-
-  //播放
-  play(src) async {
-    int result = await audioPlayer.play(src);
-    if (result == 1) {
-      // success
-      print('play success');
-    } else {
-      print('play failed');
-    }
-  }
-
-  //暂停
-  pause() async {
-    int result = await audioPlayer.pause();
-    if (result == 1) {
-      // success
-      print('pause success');
-    } else {
-      print('pause failed');
-    }
-  }
-
-
 
 }

@@ -10,6 +10,7 @@ import 'package:xiaokmusic/pages/music/singer_one_page.dart';
 import 'package:provider/provider.dart';
 import 'package:xiaokmusic/statemodels/base_state_model.dart';
 import 'package:xiaokmusic/components/song_player_component.dart';
+import 'package:xiaokmusic/utils/operate_util.dart';
 
 class CdOnePage extends StatelessWidget {
 
@@ -45,6 +46,7 @@ class CdOnePage extends StatelessWidget {
               image: _nowPlayStatusMap['image'].toString(),
               voice_url: _nowPlayStatusMap['voice_url'].toString(),
               singer_name: _nowPlayStatusMap['singer_name'].toString(),
+              cd_name:_nowPlayStatusMap['cd_name'].toString(),
             ),
           ),
 
@@ -232,14 +234,25 @@ class _CdOnePageBodyState extends State<CdOnePageBody> {
       subtitle: Text(item['description'],overflow: TextOverflow.ellipsis,),
       trailing: IconButton(
         icon: Icon(Icons.more_vert),
-        onPressed: (){},
+        onPressed: (){
+          OperateUtil().openBottomModalSheet(context, {
+            'id': item['id'].toString(),
+            'name': item['name'].toString(),
+            'image': item['image'].toString(),
+            'singer_name': item['singer_name'].toString(),
+            'cd_name': item['cd_name'].toString(),
+            'voice_url': item['voice_url'].toString(),
+          });
+        },
       ),
     );
   }
 
 
   void getCdOne() async{
-
+    if(widget.id == null || widget.id==''){
+      return ;
+    }
     var data = await MusicApi().getCdOne(widget.id.toString());
 
     setState(() {

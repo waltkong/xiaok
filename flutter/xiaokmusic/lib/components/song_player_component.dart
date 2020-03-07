@@ -5,21 +5,24 @@ import 'package:xiaokmusic/utils/operate_util.dart';
 
 import 'package:provider/provider.dart';
 import 'package:xiaokmusic/statemodels/base_state_model.dart';
+import 'package:xiaokmusic/utils/audio_player_util.dart';
 
 class SongPlayerComponent extends StatefulWidget {
 
-  String id;
-  String name;
-  String image;
-  String voice_url;
-  String singer_name;
+  final String id;
+  final String name;
+  final String image;
+  final String voice_url;
+  final String singer_name;
+  final String cd_name;
 
   SongPlayerComponent({
     @required this.id,
     @required this.name,
     @required this.image,
     @required this.voice_url,
-    @required this.singer_name
+    @required this.singer_name,
+    @required this.cd_name,
 });
 
   @override
@@ -74,8 +77,44 @@ class _SongPlayerComponentState extends State<SongPlayerComponent> {
 
               IconButton(
                 icon: _nowPlayMap['id']==widget.id && _nowPlayMap['is_play'] ? Icon(Icons.pause) : Icon(Icons.play_arrow),  //pause
-                onPressed: (){
+                onPressed: () async{
                   //todo
+                  bool pauseOrplay = _nowPlayMap['id']==widget.id && _nowPlayMap['is_play'] ? false:true;
+                  if(pauseOrplay){
+
+                    var _res = await AudioPlayerUtil().play(widget.voice_url.toString());
+
+                    if(_res){
+                      _stateProvider.setNowPlayStatusMap({
+                        'is_play': true,
+                        'id':widget.id,
+                        'image':widget.image,
+                        'name':widget.name,
+                        'singer_name':widget.singer_name,
+                        'cd_name':widget.cd_name,
+                        'voice_url': widget.voice_url,
+                      });
+                      _stateProvider.addOneToPlayList({
+                        'is_play': true,
+                        'id':widget.id,
+                        'image':widget.image,
+                        'name':widget.name,
+                        'singer_name':widget.singer_name,
+                        'cd_name':widget.cd_name,
+                        'voice_url': widget.voice_url,
+                      },'head');
+                    }
+
+
+                  }else{
+
+                    var _res = await AudioPlayerUtil().pause();
+                    if(_res){
+                      _stateProvider.setNowPlayStatusMap({
+                        'is_play': false,
+                      });
+                    }
+                  }
 
                 },
               ),

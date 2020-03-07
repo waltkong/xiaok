@@ -7,6 +7,11 @@ import 'package:xiaokmusic/pages/music/music_index_page.dart';
 import 'package:xiaokmusic/pages/my/my_index_page.dart';
 import 'package:xiaokmusic/components/drawer_component.dart';
 
+import 'package:xiaokmusic/pages/songplayer/song_index_page.dart';
+import 'package:provider/provider.dart';
+import 'package:xiaokmusic/statemodels/base_state_model.dart';
+import 'package:xiaokmusic/components/song_player_component.dart';
+
 class IndexPage extends StatefulWidget {
   @override
   _IndexPageState createState() => _IndexPageState();
@@ -45,6 +50,9 @@ class _IndexPageState extends State<IndexPage> {
   Widget build(BuildContext context) {
     ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context); //iphone6 必须build里写
 
+    BaseStateModel _stateProvider = Provider.of<BaseStateModel>(context);
+    Map _nowPlayStatusMap = _stateProvider.nowPlayStatusMap;
+
     return Scaffold(
       backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
       bottomNavigationBar: BottomNavigationBar(
@@ -71,6 +79,17 @@ class _IndexPageState extends State<IndexPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
+
+          Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+            return SongIndexPage(
+              id:_nowPlayStatusMap['id'].toString(),
+              name: _nowPlayStatusMap['name'].toString(),
+              image: _nowPlayStatusMap['image'].toString(),
+              voice_url: _nowPlayStatusMap['voice_url'].toString(),
+              cd_name: _nowPlayStatusMap['cd_name'].toString(),
+              singer_name: _nowPlayStatusMap['singer_name'].toString(),
+            );
+          }));
 
         },
         child: Icon(Icons.music_note),

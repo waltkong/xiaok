@@ -6,6 +6,10 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'dart:async';
 import 'package:xiaokmusic/pages/songplayer/song_index_page.dart';
 
+import 'package:provider/provider.dart';
+import 'package:xiaokmusic/statemodels/base_state_model.dart';
+import 'package:xiaokmusic/components/song_player_component.dart';
+
 class SongListPage extends StatelessWidget {
 
   String singer_id;
@@ -19,6 +23,10 @@ class SongListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    BaseStateModel _stateProvider = Provider.of<BaseStateModel>(context);
+    Map _nowPlayStatusMap = _stateProvider.nowPlayStatusMap;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('歌曲'),
@@ -31,7 +39,27 @@ class SongListPage extends StatelessWidget {
           ),
         ],
       ),
-      body: SongListPageBody(singer_id: this.singer_id,keyword:keyword),
+      body:   Stack(
+        children: <Widget>[
+          Container(
+            height: ScreenUtil().setHeight(1334),
+            margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(120)),
+            child: SongListPageBody(singer_id: this.singer_id,keyword:keyword),
+          ),
+
+          Positioned(
+            bottom: 0,
+            child: SongPlayerComponent(
+              id: _nowPlayStatusMap['id'].toString(),
+              name: _nowPlayStatusMap['name'].toString(),
+              image: _nowPlayStatusMap['image'].toString(),
+              voice_url: _nowPlayStatusMap['voice_url'].toString(),
+              singer_name: _nowPlayStatusMap['singer_name'].toString(),
+            ),
+          ),
+
+        ],
+      ),
     );
   }
 }

@@ -46,7 +46,6 @@ class _SongIndexPageState extends State<SongIndexPage> {
       ),
       body: Container(
         color: Colors.cyanAccent,
-        padding: EdgeInsets.all(10),
         child: _bodyWidget(),
       ),
     );
@@ -58,6 +57,7 @@ class _SongIndexPageState extends State<SongIndexPage> {
       children: <Widget>[
 
         Container(
+          padding: EdgeInsets.all(10),
           margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(150)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

@@ -6,6 +6,10 @@ import 'package:xiaokmusic/apis/music_api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xiaokmusic/pages/music/cd_one_page.dart';
 
+import 'package:provider/provider.dart';
+import 'package:xiaokmusic/statemodels/base_state_model.dart';
+import 'package:xiaokmusic/components/song_player_component.dart';
+
 class CdListPage extends StatelessWidget {
 
   String keyword;
@@ -16,6 +20,10 @@ class CdListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    BaseStateModel _stateProvider = Provider.of<BaseStateModel>(context);
+    Map _nowPlayStatusMap = _stateProvider.nowPlayStatusMap;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('专辑'),
@@ -28,7 +36,27 @@ class CdListPage extends StatelessWidget {
           ),
         ],
       ),
-      body: CdListPageBody(keyword: keyword,),
+      body: Stack(
+        children: <Widget>[
+          Container(
+            height: ScreenUtil().setHeight(1334),
+            margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(120)),
+            child: CdListPageBody(keyword: keyword,),
+          ),
+
+          Positioned(
+            bottom: 0,
+            child: SongPlayerComponent(
+              id: _nowPlayStatusMap['id'].toString(),
+              name: _nowPlayStatusMap['name'].toString(),
+              image: _nowPlayStatusMap['image'].toString(),
+              voice_url: _nowPlayStatusMap['voice_url'].toString(),
+              singer_name: _nowPlayStatusMap['singer_name'].toString(),
+            ),
+          ),
+
+        ],
+      ),
     );
   }
 }

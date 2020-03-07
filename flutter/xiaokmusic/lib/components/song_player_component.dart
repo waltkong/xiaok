@@ -35,7 +35,9 @@ class _SongPlayerComponentState extends State<SongPlayerComponent> {
     Map _nowPlayMap = _stateProvider.nowPlayStatusMap;
 
     return Container(
+      color: Colors.blue,
       height: ScreenUtil().setHeight(120),
+      width: ScreenUtil().setWidth(750),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

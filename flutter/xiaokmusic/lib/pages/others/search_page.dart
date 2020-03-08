@@ -48,6 +48,7 @@ class _SearchPageBodyState extends State<SearchPageBody> {
 
   void getSearchHistory() async{
     var res = await SearchHistoryData().getAll();
+    print(res);
     setState(() {
       searchHistory = res;
     });
@@ -114,7 +115,7 @@ class _SearchPageBodyState extends State<SearchPageBody> {
               maxLines: 1,
               autofocus: true,
               textAlign: TextAlign.left,
-              style: TextStyle(fontSize: 20,color: Colors.blue),
+              style: TextStyle(fontSize: 16,color: Colors.blue),
               onSubmitted: (text){
                 print(text);
                 setState(() {
@@ -147,7 +148,7 @@ class _SearchPageBodyState extends State<SearchPageBody> {
   void submitForm() async{
     print(_controller.text);
     if(_controller.text != null && _controller.text !=''){
-      addHistory();
+      await addHistory();
       jump_route();
     }
   }
@@ -174,14 +175,14 @@ class _SearchPageBodyState extends State<SearchPageBody> {
   }
 
 
-  void addHistory() async{
-    var res = await SearchHistoryData().addOne(_controller.text);
+  Future addHistory() async{
+    var res = await SearchHistoryData().addOne(_controller.text.toString());
     setState(() {
       searchHistory = res;
     });
   }
 
-  void deleteHistory() async{
+  Future deleteHistory() async{
      var res = await SearchHistoryData().deleteAll();
      setState(() {
        searchHistory = [];

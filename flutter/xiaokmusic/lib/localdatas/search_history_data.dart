@@ -9,12 +9,19 @@ class SearchHistoryData{
   Future<List> addOne(String keyword) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _list = await getAll();
-    if(ListUtil().in_array(keyword, _list)){
-      return _list;
+    if(_list != null){
+      if(ListUtil().in_array(keyword, _list)){
+        return _list;
+      }
     }
+
     if(_list != null && _list.length>maxCount){
       _list = _list.sublist(0,-(maxCount -1));
     }
+    if(_list == null){
+      _list = [];
+    }
+
     _list.add(keyword);
     prefs.setStringList(keyname, _list);
     return _list;

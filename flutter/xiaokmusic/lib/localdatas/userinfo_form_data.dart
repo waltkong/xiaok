@@ -7,17 +7,25 @@ class UserinfoFormData{
     'username',
     'password',
     'token',
+    'id',
+    'nickname',
+    'mobile',
+    'avatar',
+    'createtime',
+    'expiretime',
   ];
 
   String getFullKey(String key){
     return 'UserinfoFormData_'+ key;
   }
 
-
   Future setData(Map<String,String> _map) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     _map.forEach((key,value){
+      if(value == null){
+        value = '';
+      }
       prefs.setString(this.getFullKey(key.toString()), value.toString());
     });
 

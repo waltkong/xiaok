@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:xiaokmusic/utils/login_util.dart';
-import 'package:provider/provider.dart';
-import 'package:xiaokmusic/statemodels/userinfo_state_model.dart';
-import 'dart:convert';
-import 'dart:typed_data';
+import 'package:xiaokmusic/localdatas/userinfo_form_data.dart';
 
 class DrawerComponent extends StatefulWidget {
   @override
@@ -15,6 +10,36 @@ class _DrawerComponentState extends State<DrawerComponent> {
 
   int highLightIndex = 0;
   bool hideOrShow = true;
+
+  Map userinfo;
+
+  @override
+  void initState() {
+    super.initState();
+
+    getUserInfo();
+  }
+
+  void getUserInfo() async{
+
+    var avatar = await UserinfoFormData().getData('avatar');
+    var mobile = await UserinfoFormData().getData('mobile');
+    var nickname = await UserinfoFormData().getData('nickname');
+    var expiretime = await UserinfoFormData().getData('expiretime');
+
+    setState(() {
+
+      if(DateTime.now().millisecondsSinceEpoch <= int.parse(expiretime)*1000 ){
+        userinfo = {
+          'nickname' : nickname==null ? '' : nickname,
+          'avatar' : avatar==null ? '' : avatar,
+          'mobile' : mobile==null ? '' : mobile,
+        };
+      }
+
+    });
+
+  }
 
 
   @override
@@ -90,18 +115,15 @@ class _DrawerComponentState extends State<DrawerComponent> {
 
   Widget drawerHeaderBox(){
 
-    UserinfoStateModel _stateProvider = Provider.of<UserinfoStateModel>(context);
-    Map _userinfo = _stateProvider.userinfo;
-    
     return UserAccountsDrawerHeader(
-      accountName: Text(_userinfo['nickname'].toString().isEmpty ? '未登录':_userinfo['nickname'].toString(),),
+      accountName: Text(userinfo==null ? '未登录':userinfo['nickname'].toString(),),
       accountEmail: Text(
-        _userinfo['mobile'].toString().isEmpty ? '--':_userinfo['mobile'].toString(),
+        userinfo==null ? '--': '手机:'+userinfo['mobile'].toString(),
       ),
       currentAccountPicture: CircleAvatar(
-        backgroundImage: _userinfo['avatar'].toString().isEmpty ?
+        backgroundImage: userinfo==null || userinfo['avatar'].toString().isEmpty?
           AssetImage("images/music_menu.jpg"):
-          NetworkImage(_userinfo['avatar'].toString()),
+          NetworkImage(userinfo['avatar'].toString()),
       ),
     );
 

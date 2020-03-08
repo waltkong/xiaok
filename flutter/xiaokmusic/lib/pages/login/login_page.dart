@@ -313,9 +313,15 @@ class _LoginBodyPageState extends State<LoginBodyPage> {
 
         //用户信息写入本地
         await UserinfoFormData().setData({
-          'username': userinfo['username'].toString(),
+          'id':userinfo['id'].toString(),
+          'username':userinfo['username'].toString(),
+          'nickname':userinfo['nickname'].toString(),
+          'mobile':userinfo['mobile'].toString(),
+          'avatar': BaseApi.getServerAssetUrl(userinfo['avatar'].toString()),
+          'createtime': userinfo['createtime'].toString(),
+          'expiretime': userinfo['expiretime'].toString(),
+          'token': userinfo['token'].toString(),
           'password':password.toString(),
-          'token':userinfo['token'].toString(),
         });
 
         Navigator.of(context).pushNamed('/');

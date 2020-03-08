@@ -5,7 +5,7 @@ class AppConfig{
 
   static String baseUrl = "http://47.106.95.82:81/index.php";
 
-
+  static String rootUrl = "http://47.106.95.82:81";
 
 
 }

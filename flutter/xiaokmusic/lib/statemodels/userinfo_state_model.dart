@@ -8,7 +8,7 @@ class UserinfoStateModel extends ChangeNotifier{
     'username':'',
     'nickname':'',
     'mobile':'',
-    'avatar':'',   //base64
+    'avatar':'',  //http://..
     'createtime': '',
     'expiretime': '',
     'token':'',

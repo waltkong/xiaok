@@ -6,6 +6,7 @@ import 'package:xiaokmusic/apis/user_api.dart';
 import 'package:provider/provider.dart';
 import 'package:xiaokmusic/statemodels/userinfo_state_model.dart';
 import 'package:xiaokmusic/localdatas/userinfo_form_data.dart';
+import 'package:xiaokmusic/apis/base_api.dart';
 
 
 class LoginPage extends StatelessWidget {
@@ -272,8 +273,6 @@ class _LoginBodyPageState extends State<LoginBodyPage> {
             //只有输入通过验证，才会执行这里
             _formKey.currentState.save();
 
-            print(_username);
-            print(_password);
             //todo 登录操作
 
             doLogin(_stateProvider,this._username, this._password);
@@ -306,7 +305,7 @@ class _LoginBodyPageState extends State<LoginBodyPage> {
           'username':userinfo['username'].toString(),
           'nickname':userinfo['nickname'].toString(),
           'mobile':userinfo['mobile'].toString(),
-          'avatar':userinfo['avatar'].toString(),   //base64
+          'avatar': BaseApi.getServerAssetUrl(userinfo['avatar'].toString()),
           'createtime': userinfo['createtime'].toString(),
           'expiretime': userinfo['expiretime'].toString(),
           'token': userinfo['token'].toString(),

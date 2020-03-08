@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:xiaokmusic/utils/login_util.dart';
+import 'package:provider/provider.dart';
+import 'package:xiaokmusic/statemodels/userinfo_state_model.dart';
+import 'dart:convert';
+import 'dart:typed_data';
 
 class DrawerComponent extends StatefulWidget {
   @override
@@ -85,15 +89,23 @@ class _DrawerComponentState extends State<DrawerComponent> {
 
 
   Widget drawerHeaderBox(){
+
+    UserinfoStateModel _stateProvider = Provider.of<UserinfoStateModel>(context);
+    Map _userinfo = _stateProvider.userinfo;
+    
     return UserAccountsDrawerHeader(
-      accountName: Text('周杰伦',),
+      accountName: Text(_userinfo['nickname'].toString().isEmpty ? '未登录':_userinfo['nickname'].toString(),),
       accountEmail: Text(
-        'jay@163.com'
+        _userinfo['mobile'].toString().isEmpty ? '--':_userinfo['mobile'].toString(),
       ),
       currentAccountPicture: CircleAvatar(
-        backgroundImage: AssetImage("images/jay1.jpg"),
+        backgroundImage: _userinfo['avatar'].toString().isEmpty ?
+          AssetImage("images/music_menu.jpg"):
+          NetworkImage(_userinfo['avatar'].toString()),
       ),
     );
+
+
   }
 
 

@@ -10,4 +10,8 @@ class BaseApi{
     return AppConfig.baseUrl + url;
   }
 
+  static String getServerAssetUrl(String url){
+    return AppConfig.rootUrl + url;
+  }
+
 }

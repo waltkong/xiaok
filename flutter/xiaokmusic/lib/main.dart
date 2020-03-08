@@ -12,6 +12,9 @@ import 'package:xiaokmusic/pages/music/song_list_page.dart';
 
 import 'package:provider/provider.dart';
 import 'package:xiaokmusic/statemodels/base_state_model.dart';
+import 'package:xiaokmusic/statemodels/userinfo_state_model.dart';
+
+import 'package:xiaokmusic/pages/login/login_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -21,6 +24,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(builder: (context)=>BaseStateModel() ,),
+        ChangeNotifierProvider(builder: (context)=>UserinfoStateModel() ,),
       ],
       child: Container(
 
@@ -43,6 +47,8 @@ class MyApp extends StatelessWidget {
             'rank_list':(context) => RankListPage(),  //排名列表页面
             'singer_list':(context) => SingerListPage(),  //歌手列表页面
             'song_list':(context) => SongListPage(),  //歌曲列表页面
+
+            'login':(context) => LoginPage(),  //歌曲列表页面
 
           },
         ),

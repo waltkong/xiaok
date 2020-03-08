@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:xiaokmusic/utils/login_util.dart';
+
 class DrawerComponent extends StatefulWidget {
   @override
   _DrawerComponentState createState() => _DrawerComponentState();
@@ -13,7 +15,6 @@ class _DrawerComponentState extends State<DrawerComponent> {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       child: ListView(
         children: <Widget>[
@@ -64,6 +65,7 @@ class _DrawerComponentState extends State<DrawerComponent> {
               setState(() {
                 highLightIndex = 2;
               });
+              Navigator.of(context).pushNamed('login');
             },
             title: Text(
               '退出登录', style: TextStyle(fontSize: 20,color: highLightIndex==2? Colors.blue : Colors.black),

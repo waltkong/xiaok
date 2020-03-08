@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xiaokmusic/apis/music_api.dart';
 import 'package:xiaokmusic/pages/music/cd_one_page.dart';
 
+import 'package:xiaokmusic/utils/login_util.dart';
+
 class MyIndexPage extends StatefulWidget {
   @override
   _MyIndexPageState createState() => _MyIndexPageState();
@@ -27,6 +29,7 @@ class _MyIndexPageState extends State<MyIndexPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[

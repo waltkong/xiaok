@@ -43,7 +43,7 @@ class _SearchPageBodyState extends State<SearchPageBody> {
   @override
   void dispose() {
     super.dispose();
-    _controller = null;
+    _controller.dispose();
   }
 
   void getSearchHistory() async{

@@ -10,6 +10,7 @@ class AudioPlayerUtil{
     if(aPlayer == null){
       aPlayer = AudioPlayer();
     }
+
     return aPlayer;
   }
 

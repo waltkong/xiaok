@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primaryColor: Colors.blue,
           ),
-          initialRoute: "/",
+          initialRoute: "login",
           routes: {
 
             'index_loading' :  (context) => LoadingPage(),   //入口跳转页面

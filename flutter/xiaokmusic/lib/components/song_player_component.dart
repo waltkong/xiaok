@@ -6,7 +6,7 @@ import 'package:xiaokmusic/utils/operate_util.dart';
 import 'package:provider/provider.dart';
 import 'package:xiaokmusic/statemodels/base_state_model.dart';
 import 'package:xiaokmusic/utils/audio_player_util.dart';
-
+import 'package:xiaokmusic/pages/songplayer/song_index_page.dart';
 class SongPlayerComponent extends StatefulWidget {
 
   final String id;
@@ -30,6 +30,15 @@ class SongPlayerComponent extends StatefulWidget {
 }
 
 class _SongPlayerComponentState extends State<SongPlayerComponent> {
+
+
+  @override
+  void initState() {
+    super.initState();
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -72,7 +81,21 @@ class _SongPlayerComponentState extends State<SongPlayerComponent> {
             children: <Widget>[
               IconButton(
                 icon: Icon(Icons.skip_previous),
-                onPressed: (){},
+                onPressed: () async{
+                  var resMap = await AudioPlayerUtil(context: context).doNextPlay(_stateProvider,-1);
+                  if(resMap != null){
+                    Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+                      return SongIndexPage(
+                        id:resMap['id'].toString(),
+                        name: resMap['name'].toString(),
+                        image: resMap['image'].toString(),
+                        voice_url: resMap['voice_url'].toString(),
+                        cd_name: resMap['cd_name'].toString(),
+                        singer_name: resMap['singer_name'].toString(),
+                      );
+                    }));
+                  }
+                },
               ),
 
               IconButton(
@@ -82,7 +105,7 @@ class _SongPlayerComponentState extends State<SongPlayerComponent> {
                   bool pauseOrplay = _nowPlayMap['id']==widget.id && _nowPlayMap['is_play'] ? false:true;
                   if(pauseOrplay){
 
-                    var _res = await AudioPlayerUtil().play(widget.voice_url.toString());
+                    var _res = await AudioPlayerUtil(context: context).play(widget.voice_url.toString());
 
                     if(_res){
                       _stateProvider.setNowPlayStatusMap({
@@ -108,7 +131,7 @@ class _SongPlayerComponentState extends State<SongPlayerComponent> {
 
                   }else{
 
-                    var _res = await AudioPlayerUtil().pause();
+                    var _res = await AudioPlayerUtil(context: context).pause();
                     if(_res){
                       _stateProvider.setNowPlayStatusMap({
                         'is_play': false,
@@ -121,7 +144,21 @@ class _SongPlayerComponentState extends State<SongPlayerComponent> {
 
               IconButton(
                 icon: Icon(Icons.skip_next),
-                onPressed: (){},
+                onPressed: () async{
+                  var resMap = await AudioPlayerUtil(context: context).doNextPlay(_stateProvider,1);
+                  if(resMap != null){
+                    Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+                      return SongIndexPage(
+                        id:resMap['id'].toString(),
+                        name: resMap['name'].toString(),
+                        image: resMap['image'].toString(),
+                        voice_url: resMap['voice_url'].toString(),
+                        cd_name: resMap['cd_name'].toString(),
+                        singer_name: resMap['singer_name'].toString(),
+                      );
+                    }));
+                  }
+                },
               ),
 
               IconButton(

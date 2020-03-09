@@ -86,11 +86,9 @@ class _SongModalSheetComponentState extends State<SongModalSheetComponent> {
 
   void _listenThisItemTap(String flag,BaseStateModel _stateProvider) async{
 
-    print(flag);
-
     switch(flag){
       case 'play':
-        var playerRes = await AudioPlayerUtil().play(widget.voice_url);
+        var playerRes = await AudioPlayerUtil(context: context).play(widget.voice_url);
         if(playerRes){
           _stateProvider.addOneToPlayList({
             'id':widget.id,
@@ -115,6 +113,7 @@ class _SongModalSheetComponentState extends State<SongModalSheetComponent> {
 
         break;
       case 'next_play':
+
         _stateProvider.addOneToPlayList({
           'id':widget.id,
           'image':widget.image,
@@ -124,6 +123,7 @@ class _SongModalSheetComponentState extends State<SongModalSheetComponent> {
           'voice_url':widget.voice_url,
         },'next');
         Navigator.of(context).pop(flag);
+
         break;
     }
   }

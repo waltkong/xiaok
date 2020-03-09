@@ -16,5 +16,11 @@ class NumberUtil{
     return result;
   }
 
+  //最大数内随机
+  int randomInMaxNumber(int max){
+    return Random().nextInt(max);
+  }
+
+
 
 }

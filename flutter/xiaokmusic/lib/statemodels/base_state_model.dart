@@ -87,8 +87,24 @@ class BaseStateModel extends ChangeNotifier{
   }
 
 
+  //播放器监听相关
+  var maxDuration = 0;   //单曲最大时长
+  var currentPosition = 0;  //单曲当前进度时长
+  var playerState;      // 播放器当前状态
 
+  setMaxDuration( value){
+    maxDuration = value;
+    notifyListeners();
+  }
 
+  setCurrentPosition( value){
+    currentPosition = value;
+    notifyListeners();
+  }
 
+  setPlayerState( value){
+    playerState = value;
+    notifyListeners();
+  }
 
 }

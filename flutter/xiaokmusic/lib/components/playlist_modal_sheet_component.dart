@@ -7,6 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:xiaokmusic/statemodels/base_state_model.dart';
 import 'package:xiaokmusic/models/all_enum.dart';
 
+import 'package:xiaokmusic/utils/audio_player_util.dart';
+import 'package:xiaokmusic/pages/songplayer/song_index_page.dart';
+
 class PlaylistModalSheetComponent extends StatefulWidget {
   @override
   _PlaylistModalSheetComponentState createState() => _PlaylistModalSheetComponentState();
@@ -37,15 +40,46 @@ class _PlaylistModalSheetComponentState extends State<PlaylistModalSheetComponen
     List _nowPlayList = _stateProvider.nowPlayList;
 
     List<Widget> ret = _nowPlayList.map((item){
-      return Container(
-        height: ScreenUtil().setHeight(60),
-        child: ListTile(
-          leading: Text("${item['name']}",overflow: TextOverflow.ellipsis,),
-          title: Text("${item['singer_name']}",style: TextStyle(fontSize: 13),overflow: TextOverflow.ellipsis,),
-          trailing: IconButton(
-            icon: Icon(Icons.close), onPressed: (){
-              _stateProvider.deleteOnePlayList(item['id'].toString());
-            }
+      return GestureDetector(
+        onTap: () async{
+
+          var playerRes = await AudioPlayerUtil(context: context).play(item['voice_url'].toString());
+          if(playerRes){
+
+            _stateProvider.setNowPlayStatusMap({
+              'is_play':true,
+              'id': item['id'].toString(),
+              'image':item['image'].toString(),
+              'name':item['name'].toString(),
+              'singer_name':item['singer_name'].toString(),
+              'cd_name':item['cd_name'].toString(),
+              'voice_url':item['voice_url'].toString(),
+            });
+
+            Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+              return SongIndexPage(
+                id:item['id'].toString(),
+                name: item['name'].toString(),
+                image: item['image'].toString(),
+                voice_url: item['voice_url'].toString(),
+                cd_name: item['cd_name'].toString(),
+                singer_name: item['singer_name'].toString(),
+              );
+            }));
+          }
+
+
+        },
+        child: Container(
+          height: ScreenUtil().setHeight(60),
+          child: ListTile(
+            leading: Text("${item['name']}",overflow: TextOverflow.ellipsis,),
+            title: Text("${item['singer_name']}",style: TextStyle(fontSize: 13),overflow: TextOverflow.ellipsis,),
+            trailing: IconButton(
+              icon: Icon(Icons.close), onPressed: (){
+                _stateProvider.deleteOnePlayList(item['id'].toString());
+              }
+            ),
           ),
         ),
       );

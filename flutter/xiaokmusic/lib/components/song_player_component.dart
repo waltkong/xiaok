@@ -84,6 +84,7 @@ class _SongPlayerComponentState extends State<SongPlayerComponent> {
                 onPressed: () async{
                   var resMap = await AudioPlayerUtil(context: context).doNextPlay(_stateProvider,-1);
                   if(resMap != null){
+                    Navigator.of(context).pop();
                     Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
                       return SongIndexPage(
                         id:resMap['id'].toString(),
@@ -147,6 +148,7 @@ class _SongPlayerComponentState extends State<SongPlayerComponent> {
                 onPressed: () async{
                   var resMap = await AudioPlayerUtil(context: context).doNextPlay(_stateProvider,1);
                   if(resMap != null){
+                    Navigator.of(context).pop();
                     Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
                       return SongIndexPage(
                         id:resMap['id'].toString(),

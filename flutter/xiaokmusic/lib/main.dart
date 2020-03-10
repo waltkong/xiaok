@@ -13,6 +13,7 @@ import 'package:xiaokmusic/pages/music/song_list_page.dart';
 import 'package:provider/provider.dart';
 import 'package:xiaokmusic/statemodels/base_state_model.dart';
 import 'package:xiaokmusic/statemodels/userinfo_state_model.dart';
+import 'package:xiaokmusic/statemodels/operate_state_model.dart';
 
 import 'package:xiaokmusic/pages/login/login_page.dart';
 
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(builder: (context)=>BaseStateModel() ,),
         ChangeNotifierProvider(builder: (context)=>UserinfoStateModel() ,),
+        ChangeNotifierProvider(builder: (context)=>OperateStateModel() ,),
       ],
       child: Container(
 

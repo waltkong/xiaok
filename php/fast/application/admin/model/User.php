@@ -106,4 +106,16 @@ class User extends Model
         return $this->belongsTo('UserGroup', 'group_id', 'id', [], 'LEFT')->setEagerlyType(0);
     }
 
+
+    public function getMap($uids){
+        $userRes = ( new self())->whereIn('id',$uids)->select();
+        $userRes = collection($userRes)->toArray();
+        $ret = [];
+        foreach ($userRes as $k => $v){
+            $ret[$v['id']] = $v;
+        }
+        return $ret;
+    }
+
+
 }

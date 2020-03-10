@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xiaokmusic/apis/music_api.dart';
 import 'package:xiaokmusic/components/song_player_component.dart';
-
+import 'package:xiaokmusic/pages/music/message_list_page.dart';
 
 class SongIndexPage extends StatefulWidget {
 
@@ -105,7 +105,15 @@ class _SongIndexPageState extends State<SongIndexPage> {
 
                     IconButton(
                       icon: Icon(Icons.message),
-                      onPressed: (){},
+                      onPressed: (){
+
+                        Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+                          return MessageListPage(
+                            song_id: widget.id.toString(),
+                          );
+                        }));
+
+                      },
                     ),
 
                     IconButton(
@@ -143,6 +151,7 @@ class _SongIndexPageState extends State<SongIndexPage> {
             image: widget.image.toString(),
             voice_url: widget.voice_url.toString(),
             singer_name: widget.singer_name.toString(),
+            cd_name:  widget.cd_name.toString(),
           ),
         ),
 

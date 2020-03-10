@@ -100,7 +100,7 @@ class _SingerListPageBodyState extends State<SingerListPageBody> {
         textColor: Colors.blue,
         moreInfoColor: Colors.blue,
         showMore: true,
-        noMoreText: '没有更多了...',
+        noMoreText: '',
         moreInfo: '加载中...',
         loadReadyText: '上拉加载...',
       ),

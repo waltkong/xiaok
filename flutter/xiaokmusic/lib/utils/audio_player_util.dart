@@ -37,16 +37,16 @@ class AudioPlayerUtil{
     BaseStateModel _stateProvider = Provider.of<BaseStateModel>(context);
 
     //进度最大值监听
-    _player.onDurationChanged.listen((Duration d) {
-//      print('Max duration: $d');
-      _stateProvider.setMaxDuration(d);
-    });
-
-    //进度改变
-    _player.onAudioPositionChanged.listen((Duration  p){
-//      print('Position Changed: $p');
-      _stateProvider.setCurrentPosition(p);
-    });
+//    _player.onDurationChanged.listen((Duration d) {
+////      print('Max duration: $d');
+//      _stateProvider.setMaxDuration(d);
+//    });
+//
+//    //进度改变
+//    _player.onAudioPositionChanged.listen((Duration  p){
+////      print('Position Changed: $p');
+//      _stateProvider.setCurrentPosition(p);
+//    });
 
     _player.onPlayerCompletion.listen((event) async{
       print('on Player Completion');

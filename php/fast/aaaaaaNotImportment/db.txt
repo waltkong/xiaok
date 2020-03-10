@@ -12,9 +12,13 @@ php think crud -t music_song -c music/song -m music/song_model --relation=music_
 
 php think crud -t music_tag -c music/tag -m music/tag_model
 
+
+php think crud -t music_message -c music/message -m music/message_model --relation=user   --relationforeignkey=user_id 
+
 php think menu -c music/ad
 php think menu -c music/banner
 php think menu -c music/cd
 php think menu -c music/singer
 php think menu -c music/song
 php think menu -c music/tag
+php think menu -c music/message

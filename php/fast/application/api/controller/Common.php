@@ -139,4 +139,17 @@ class Common extends Api
             $this->error($file->getError());
         }
     }
+
+
+    public function checkToken(){
+        $token = $this->request->server('HTTP_TOKEN', $this->request->request('token', \think\Cookie::get('token')));
+        //初始化
+        $this->auth->init($token);
+        //检测是否登录
+        if (!$this->auth->isLogin()) {
+            $this->error(__('Please login first'), null, 401);
+        }
+    }
+
+
 }

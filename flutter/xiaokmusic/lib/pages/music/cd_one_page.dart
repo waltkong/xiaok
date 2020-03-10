@@ -12,6 +12,8 @@ import 'package:xiaokmusic/statemodels/base_state_model.dart';
 import 'package:xiaokmusic/components/song_player_component.dart';
 import 'package:xiaokmusic/utils/operate_util.dart';
 
+import 'package:xiaokmusic/pages/music/message_list_page.dart';
+
 class CdOnePage extends StatelessWidget {
 
   String id;
@@ -154,24 +156,49 @@ class _CdOnePageBodyState extends State<CdOnePageBody> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          Icon(Icons.favorite_border),
-                          Text(NumberUtil().randomNumber(4)),
-                        ],
+
+                      InkWell(
+                        child: Column(
+                          children: <Widget>[
+                            Icon(Icons.favorite_border),
+                            Text(NumberUtil().randomNumber(4)),
+                          ],
+                        ),
+                        onTap: (){
+
+                        },
                       ),
-                      Column(
-                        children: <Widget>[
-                          Icon(Icons.message),
-                          Text(NumberUtil().randomNumber(3)),
-                        ],
+
+                      InkWell(
+                        child: Column(
+                          children: <Widget>[
+                            Icon(Icons.message),
+                            Text(NumberUtil().randomNumber(3)),
+                          ],
+                        ),
+                        onTap: (){
+                          Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+                            return MessageListPage(
+                              cd_id: widget.id.toString(),
+                            );
+                          }));
+                        },
                       ),
-                      Column(
-                        children: <Widget>[
-                          Icon(Icons.screen_share),
-                          Text('分享'),
-                        ],
+
+                      InkWell(
+                        child: Column(
+                          children: <Widget>[
+                            Icon(Icons.screen_share),
+                            Text('分享'),
+                          ],
+                        ),
+                        onTap: (){
+
+                        },
                       ),
+
+
+
                     ],
                   ),
 

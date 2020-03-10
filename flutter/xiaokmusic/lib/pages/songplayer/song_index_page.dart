@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xiaokmusic/apis/music_api.dart';
 import 'package:xiaokmusic/components/song_player_component.dart';
 import 'package:xiaokmusic/pages/music/message_list_page.dart';
+import 'package:xiaokmusic/utils/number_util.dart';
 
 class SongIndexPage extends StatefulWidget {
 
@@ -31,6 +32,9 @@ class SongIndexPage extends StatefulWidget {
 class _SongIndexPageState extends State<SongIndexPage> {
 
   Map song;
+
+  int like_count = NumberUtil().randomInMaxNumber(1000);
+  int download_count = NumberUtil().randomInMaxNumber(1000);
 
   @override
   void initState() {
@@ -93,37 +97,63 @@ class _SongIndexPageState extends State<SongIndexPage> {
               ),
 
               Container(
-                padding: EdgeInsets.only(left: 50,right: 50,top: 5),
+                padding: EdgeInsets.only(left: 30,right: 30,top: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
 
-                    IconButton(
-                      icon: Icon(Icons.favorite),
-                      onPressed: (){},
+                    InkWell(
+                      child: Column(
+                        children: <Widget>[
+                          Icon(Icons.favorite_border),
+                          Text(like_count.toString()),
+                        ],
+                      ),
+                      onTap: (){
+                        setState(() {
+                          like_count +=1;
+                        });
+                      },
                     ),
 
-                    IconButton(
-                      icon: Icon(Icons.message),
-                      onPressed: (){
-
+                    InkWell(
+                      child: Column(
+                        children: <Widget>[
+                          Icon(Icons.message),
+                          Text(song==null? '' : " ${song['message_count']}"),
+                        ],
+                      ),
+                      onTap: (){
                         Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
                           return MessageListPage(
                             song_id: widget.id.toString(),
                           );
                         }));
-
                       },
                     ),
 
-                    IconButton(
-                      icon: Icon(Icons.file_download),
-                      onPressed: (){},
+                    InkWell(
+                      child: Column(
+                        children: <Widget>[
+                          Icon(Icons.file_download),
+                          Text(download_count.toString()),
+                        ],
+                      ),
+                      onTap: (){
+                        setState(() {
+                          download_count +=1;
+                        });
+                      },
                     ),
 
-                    IconButton(
-                      icon: Icon(Icons.add_comment),
-                      onPressed: (){},
+                    InkWell(
+                      child: Column(
+                        children: <Widget>[
+                          Icon(Icons.add_comment),
+                          Text('加入歌单',style: TextStyle(fontSize: 12),),
+                        ],
+                      ),
+                      onTap: (){},
                     ),
 
                   ],

@@ -75,6 +75,8 @@ class _CdOnePageBodyState extends State<CdOnePageBody> {
   Map cd;
   List songList;
 
+  int like_count = NumberUtil().randomInMaxNumber(1000);
+
   @override
   void initState() {
     super.initState();
@@ -161,11 +163,15 @@ class _CdOnePageBodyState extends State<CdOnePageBody> {
                         child: Column(
                           children: <Widget>[
                             Icon(Icons.favorite_border),
-                            Text(NumberUtil().randomNumber(4)),
+                            Text(
+                                like_count.toString()
+                            ),
                           ],
                         ),
                         onTap: (){
-
+                          setState(() {
+                            like_count += 1;
+                          });
                         },
                       ),
 
@@ -173,7 +179,9 @@ class _CdOnePageBodyState extends State<CdOnePageBody> {
                         child: Column(
                           children: <Widget>[
                             Icon(Icons.message),
-                            Text(NumberUtil().randomNumber(3)),
+                            Text(
+                                cd==null? '' : " ${cd['message_count']}"
+                            ),
                           ],
                         ),
                         onTap: (){

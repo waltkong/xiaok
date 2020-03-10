@@ -4,6 +4,7 @@ namespace app\api\logic\music;
 use app\admin\model\music\Ad_model;
 use app\admin\model\music\Banner_model;
 use app\admin\model\music\Cd_model;
+use app\admin\model\music\Message_model;
 use app\admin\model\music\Singer_model;
 use app\admin\model\music\Song_model;
 use app\api\repository\MusicRepository;
@@ -94,6 +95,9 @@ class DataLogic{
             $singerRow = Singer_model::where('id',$row['singer_id'])->find();
             $row['singer_name'] = $singerRow['name'];
             $row['singer_image'] = UrlUtil::getFullUrl($singerRow['one_image']);
+
+            //对象类型 1歌手2cd3歌曲
+            $row['message_count'] = (new Message_model())->where('obj_type',2)->where('obj_id',$id)->count();
         }
 
         $list = [];
@@ -193,6 +197,10 @@ class DataLogic{
             $row['singer_name'] = $singerMap[$row['singer_id']] ?? '';
             $row['cd_name'] = $cdMap[$row['cd_id']] ?? '';
 
+
+            //对象类型 1歌手2cd3歌曲
+            $row['message_count'] = (new Message_model())->where('obj_type',3)->where('obj_id',$id)->count();
+
         }
         return [
             'song_row' => $row ?? [],
@@ -208,6 +216,9 @@ class DataLogic{
 
         if(!empty($row)){
             $row['one_image'] = UrlUtil::getFullUrl($row['one_image']);
+
+            //对象类型 1歌手2cd3歌曲
+            $row['message_count'] = (new Message_model())->where('obj_type',1)->where('obj_id',$id)->count();
         }
 
         $list = [];

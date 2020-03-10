@@ -12,10 +12,22 @@ class MyIndexPage extends StatefulWidget {
 
 class _MyIndexPageState extends State<MyIndexPage> {
 
+  TextEditingController _collectionnamecontroller = TextEditingController();
+
+  List myCollectionList = [
+      {'name':'默认'}
+    ];
+
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _collectionnamecontroller.dispose();
+    super.dispose();
   }
 
 
@@ -43,6 +55,7 @@ class _MyIndexPageState extends State<MyIndexPage> {
 
   Widget _myPersonalCollectionBox(){
 
+    List<Widget> ret = myCollectionList.map((item) => _myPersonalCollectionBoxItem(item)).toList();
 
     return Container(
       padding: EdgeInsets.all(3),
@@ -57,7 +70,55 @@ class _MyIndexPageState extends State<MyIndexPage> {
               ),
 
               FlatButton(
-                onPressed: (){},
+                onPressed: (){
+                  showDialog(context: context,builder: (BuildContext context){
+
+                    return SimpleDialog(
+                      title: Text('请输入歌单名'),
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+
+                            Container(
+                              width:ScreenUtil().setWidth(300),
+                              child: TextField(
+                                controller: _collectionnamecontroller,
+                                maxLength: 20,
+                                autofocus: false,//是否自动对焦
+                                textAlign: TextAlign.left,//文本对齐方式
+                                onSubmitted: (text) {//内容提交(按回车)的回调
+                                  setState(() {
+                                    myCollectionList.add( {'name':_collectionnamecontroller.text.toString()});
+                                    _collectionnamecontroller.text = '';
+                                  });
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ),
+
+                            Container(
+                              width:ScreenUtil().setWidth(80),
+                              padding: EdgeInsets.all(5),
+                              child: InkWell(
+                                child: Text('确定'),
+                                onTap: (){
+                                  setState(() {
+                                    myCollectionList.add( {'name':_collectionnamecontroller.text.toString()});
+                                    _collectionnamecontroller.text = '';
+                                  });
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      ],
+                    );
+
+                  });
+                },
                 child: Text('新建'),
               ),
 
@@ -65,7 +126,7 @@ class _MyIndexPageState extends State<MyIndexPage> {
           ),
 
           Column(
-            children: <Widget>[],
+            children: ret,
           ),
         ],
       ),
@@ -73,20 +134,15 @@ class _MyIndexPageState extends State<MyIndexPage> {
 
   }
 
-  Widget _myPersonalCdBoxItem(item){
+  Widget _myPersonalCollectionBoxItem(item){
     return Column(
       children: <Widget>[
         Container(
           padding: EdgeInsets.all(3),
           height: ScreenUtil().setHeight(100),
           child: ListTile(
-            leading: Image.network(
-              item['image'],
-              fit: BoxFit.cover,
-              height: ScreenUtil().setHeight(100),
-              width: ScreenUtil().setWidth(160),
-            ),
-            title: Text(item['name']),
+            leading: Icon(Icons.collections),
+            title: Text(item['name'].toString()),
             trailing: IconButton(icon: Icon(Icons.arrow_forward), onPressed: (){}),
           ),
         ),
@@ -114,7 +170,7 @@ class _MyIndexPageState extends State<MyIndexPage> {
                       child: Text('本地音乐'),
                     ),
                     Container(
-                      child: Text('12'),
+                      child: Text('0'),
                     ),
                   ],
                 ),
@@ -128,7 +184,7 @@ class _MyIndexPageState extends State<MyIndexPage> {
                       child: Text('最近播放'),
                     ),
                     Container(
-                      child: Text('200'),
+                      child: Text('0'),
                     ),
                   ],
                 ),
@@ -142,7 +198,7 @@ class _MyIndexPageState extends State<MyIndexPage> {
                       child: Text('关注歌手'),
                     ),
                     Container(
-                      child: Text('12'),
+                      child: Text('0'),
                     ),
                   ],
                 ),

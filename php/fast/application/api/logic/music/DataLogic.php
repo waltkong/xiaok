@@ -288,6 +288,15 @@ class DataLogic{
     }
 
 
+    public function get_singer_id_by_song_id($input){
+        $song_id = $input['song_id'] ?? '';
+        $singer_id = Song_model::where('id',$song_id)->value('singer_id');
+        return [
+            'singer_id' => $singer_id,
+        ];
+    }
+
+
 
 
 

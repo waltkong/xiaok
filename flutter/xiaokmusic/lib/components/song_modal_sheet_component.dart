@@ -7,6 +7,10 @@ import 'package:provider/provider.dart';
 import 'package:xiaokmusic/statemodels/base_state_model.dart';
 import 'package:xiaokmusic/utils/audio_player_util.dart';
 
+import 'package:share/share.dart';
+import 'package:xiaokmusic/pages/music/singer_one_page.dart';
+import 'package:xiaokmusic/apis/music_api.dart';
+
 class SongModalSheetComponent extends StatefulWidget {
 
   String id;
@@ -125,6 +129,22 @@ class _SongModalSheetComponentState extends State<SongModalSheetComponent> {
         Navigator.of(context).pop(flag);
 
         break;
+
+      case 'share':
+        Navigator.of(context).pop(flag);
+        Share.share('xiaokmusic ， 分享一下~'); //可以传网页
+        break;
+
+      case 'singer_detail':
+        Navigator.of(context).pop(flag);
+
+        var response = await MusicApi().getSingerIdBySongId(widget.id.toString());
+
+        var singerId = response['data']['singer_id'];
+
+        Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+          return SingerOnePage(id:singerId.toString());
+        }));
     }
   }
 

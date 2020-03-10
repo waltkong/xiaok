@@ -4,14 +4,33 @@ import 'package:xiaokmusic/apis/music_api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'dart:async';
+import 'package:xiaokmusic/pages/songplayer/song_index_page.dart';
 
+import 'package:provider/provider.dart';
+import 'package:xiaokmusic/statemodels/base_state_model.dart';
+import 'package:xiaokmusic/components/song_player_component.dart';
+import 'package:xiaokmusic/utils/operate_util.dart';
 
 class RankListPage extends StatelessWidget {
+
+  String singer_id;
+  String keyword;
+
+
+  RankListPage({
+    this.singer_id,
+    this.keyword,
+  });
+
   @override
   Widget build(BuildContext context) {
+
+    BaseStateModel _stateProvider = Provider.of<BaseStateModel>(context);
+    Map _nowPlayStatusMap = _stateProvider.nowPlayStatusMap;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('排名'),
+        title: Text('歌曲'),
         actions: <Widget>[
           InkWell(
             onTap: (){
@@ -21,12 +40,41 @@ class RankListPage extends StatelessWidget {
           ),
         ],
       ),
-      body: RankListPageBody(),
+      body:   Stack(
+        children: <Widget>[
+          Container(
+            height: ScreenUtil().setHeight(1334),
+            margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(120)),
+            child: RankListPageBody(singer_id: this.singer_id,keyword:keyword),
+          ),
+
+          Positioned(
+            bottom: 0,
+            child: SongPlayerComponent(
+              id: _nowPlayStatusMap['id'].toString(),
+              name: _nowPlayStatusMap['name'].toString(),
+              image: _nowPlayStatusMap['image'].toString(),
+              voice_url: _nowPlayStatusMap['voice_url'].toString(),
+              singer_name: _nowPlayStatusMap['singer_name'].toString(),
+              cd_name: _nowPlayStatusMap['cd_name'].toString(),
+            ),
+          ),
+
+        ],
+      ),
     );
   }
 }
 
 class RankListPageBody extends StatefulWidget {
+
+  String singer_id;
+  String keyword;
+  RankListPageBody({
+    this.singer_id,
+    this.keyword,
+  });
+
   @override
   _RankListPageBodyState createState() => _RankListPageBodyState();
 }
@@ -84,7 +132,7 @@ class _RankListPageBodyState extends State<RankListPageBody> {
         children: <Widget>[
 
           Container(
-            child: Text('热门歌曲',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+            child: Text('好歌推荐',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
           ),
 
           Container(
@@ -126,7 +174,18 @@ class _RankListPageBodyState extends State<RankListPageBody> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           GestureDetector(
-            onTap: (){},
+            onTap: (){
+              Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+                return SongIndexPage(
+                  id:item['id'].toString(),
+                  name: item['name'].toString(),
+                  image: item['image'].toString(),
+                  voice_url: item['voice_url'].toString(),
+                  cd_name: item['cd_name'].toString(),
+                  singer_name: item['singer_name'].toString(),
+                );
+              }));
+            },
             child: Container(
               padding: EdgeInsets.only(bottom:3),
               height: ScreenUtil().setHeight(100),
@@ -143,7 +202,16 @@ class _RankListPageBodyState extends State<RankListPageBody> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                trailing: Icon(Icons.arrow_forward),
+                trailing: IconButton(icon: Icon(Icons.more_vert), onPressed: (){
+                  OperateUtil().openBottomModalSheet(context, {
+                    'id': item['id'].toString(),
+                    'name': item['name'].toString(),
+                    'image': item['image'].toString(),
+                    'singer_name': item['singer_name'].toString(),
+                    'cd_name': item['cd_name'].toString(),
+                    'voice_url': item['voice_url'].toString(),
+                  });
+                }),
               ),
             ),
           ),
@@ -167,6 +235,14 @@ class _RankListPageBodyState extends State<RankListPageBody> {
       'eachPage':eachPage.toString(),
       'pageIndex':pageIndex.toString(),
     };
+
+    if(widget.singer_id != null && widget.singer_id !=''){
+      _map['singer_id'] = widget.singer_id;
+    }
+    if(widget.keyword != null && widget.keyword !=''){
+      _map['name'] = widget.keyword;
+    }
+
     var data = await MusicApi().getSongListData(_map);
     var _songdata = data['data']['data'];
     setState(() {

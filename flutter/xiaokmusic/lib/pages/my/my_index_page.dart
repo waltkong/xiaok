@@ -12,20 +12,12 @@ class MyIndexPage extends StatefulWidget {
 
 class _MyIndexPageState extends State<MyIndexPage> {
 
-  List recommendCdList = [];
 
   @override
   void initState() {
     super.initState();
-    getRecommendCdList();
   }
 
-  void getRecommendCdList() async{
-    var data = await MusicApi().recommendCdList();
-    setState(() {
-      this.recommendCdList = data['data']['data'];
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,18 +29,20 @@ class _MyIndexPageState extends State<MyIndexPage> {
 
           _categoryBox(),
 
-          _myPersonalCdBox(),  //我的歌单
+          Divider(),
 
-          _recommendBox(), //推荐歌单
+          _myPersonalCollectionBox(),  //我的歌单
+
 
         ],
       ),
     );
   }
 
-  Widget _myPersonalCdBox(){
 
-    List<Widget> ret = recommendCdList.map((item) => _myPersonalCdBoxItem(item)).toList();
+
+  Widget _myPersonalCollectionBox(){
+
 
     return Container(
       padding: EdgeInsets.all(3),
@@ -71,11 +65,12 @@ class _MyIndexPageState extends State<MyIndexPage> {
           ),
 
           Column(
-            children: ret.length>0 ? ret: <Widget>[],
+            children: <Widget>[],
           ),
         ],
       ),
     );
+
   }
 
   Widget _myPersonalCdBoxItem(item){
@@ -101,95 +96,9 @@ class _MyIndexPageState extends State<MyIndexPage> {
   }
 
 
-
-  Widget _recommendBox(){
-
-    List<Widget> ret = recommendCdList.map((_item) => _recommendBoxItem(_item)).toList();
-
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-
-              Container(
-                padding: EdgeInsets.all(3),
-                child: Text(
-                  '推荐歌单',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-
-              Container(
-                padding: EdgeInsets.all(8),
-                child: FlatButton(
-                  onPressed: (){
-                    Navigator.of(context).pushNamed('cd_list');
-                  },
-                  child: Text('更多...',),
-                ),
-              ),
-
-            ],
-
-          ),
-
-
-          Container(
-            padding: EdgeInsets.all(10),
-            child: Wrap(
-              spacing:10,
-              runSpacing: 5,
-              alignment: WrapAlignment.spaceAround,
-              runAlignment: WrapAlignment.start,
-              children: recommendCdList.length > 0 ? ret:<Widget>[],
-            ),
-
-          ),
-
-
-        ],
-      ),
-    );
-  }
-
-
-  Widget _recommendBoxItem(item){
-    return GestureDetector(
-      onTap: (){
-        Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
-          return CdOnePage(id:item['id'].toString());
-        }));
-      },
-      child: Column(
-        children: <Widget>[
-          Image.network(
-            item['image'],
-            width: ScreenUtil().setWidth(210),
-            height: ScreenUtil().setHeight(160),
-            fit: BoxFit.cover,
-          ),
-          Text(
-            item['name'],
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
-  }
-
-
   Widget _categoryBox(){
     return Container(
-      padding: EdgeInsets.all(5),
+      padding: EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
 
@@ -228,20 +137,6 @@ class _MyIndexPageState extends State<MyIndexPage> {
               Container(
                 child: Column(
                   children: <Widget>[
-                    Icon(Icons.favorite),
-                    Container(
-                      child: Text('我喜欢的'),
-                    ),
-                    Container(
-                      child: Text('12'),
-                    ),
-                  ],
-                ),
-              ),
-
-              Container(
-                child: Column(
-                  children: <Widget>[
                     Icon(Icons.supervised_user_circle),
                     Container(
                       child: Text('关注歌手'),
@@ -255,6 +150,61 @@ class _MyIndexPageState extends State<MyIndexPage> {
 
             ],
           ),
+
+
+          Container(
+            height: 10,
+          ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+
+              Container(
+                child: Column(
+                  children: <Widget>[
+                    Icon(Icons.music_note),
+                    Container(
+                      child: Text('歌曲收藏'),
+                    ),
+                    Container(
+                      child: Text('120'),
+                    ),
+                  ],
+                ),
+              ),
+
+              Container(
+                child: Column(
+                  children: <Widget>[
+                    Icon(Icons.collections),
+                    Container(
+                      child: Text('专辑收藏'),
+                    ),
+                    Container(
+                      child: Text('12'),
+                    ),
+                  ],
+                ),
+              ),
+
+              Container(
+                child: Column(
+                  children: <Widget>[
+                    Icon(Icons.video_label),
+                    Container(
+                      child: Text('MV收藏'),
+                    ),
+                    Container(
+                      child: Text('12'),
+                    ),
+                  ],
+                ),
+              ),
+
+            ],
+          ),
+
 
         ],
       ),

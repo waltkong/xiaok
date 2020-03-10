@@ -75,6 +75,13 @@ class Data extends Common{
     }
 
 
+    public function get_singer_id_by_song_id(){
+        $input = $this->req;
+        $data = $this->logic->get_singer_id_by_song_id($input);
+        $this->success('ok',$data);
+    }
+
+
 
 
 

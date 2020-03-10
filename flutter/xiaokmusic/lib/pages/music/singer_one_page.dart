@@ -18,7 +18,7 @@ class SingerOnePage extends StatelessWidget {
   String id;
 
   SingerOnePage({
-    this.id
+    this.id,
   });
 
   @override

@@ -10,7 +10,7 @@ use app\admin\model\music\Song_model;
 use app\api\repository\MusicRepository;
 use app\common\util\UrlUtil;
 
-class DataLogic{
+class DataLogic extends BaseLogic{
 
     public function banner_list($pageIndex=1, $eachPage=10){
         $pageOffset = ($pageIndex-1)*$eachPage;

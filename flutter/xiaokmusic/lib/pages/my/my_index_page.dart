@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xiaokmusic/apis/music_api.dart';
 import 'package:xiaokmusic/pages/music/cd_one_page.dart';
 
 import 'package:xiaokmusic/utils/login_util.dart';
+import 'package:path_provider/path_provider.dart';
 
 class MyIndexPage extends StatefulWidget {
   @override
@@ -165,20 +168,6 @@ class _MyIndexPageState extends State<MyIndexPage> {
               Container(
                 child: Column(
                   children: <Widget>[
-                    Icon(Icons.library_music),
-                    Container(
-                      child: Text('本地音乐'),
-                    ),
-                    Container(
-                      child: Text('0'),
-                    ),
-                  ],
-                ),
-              ),
-
-              Container(
-                child: Column(
-                  children: <Widget>[
                     Icon(Icons.watch_later),
                     Container(
                       child: Text('最近播放'),
@@ -203,18 +192,6 @@ class _MyIndexPageState extends State<MyIndexPage> {
                   ],
                 ),
               ),
-
-            ],
-          ),
-
-
-          Container(
-            height: 10,
-          ),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
 
               Container(
                 child: Column(
@@ -244,23 +221,8 @@ class _MyIndexPageState extends State<MyIndexPage> {
                 ),
               ),
 
-              Container(
-                child: Column(
-                  children: <Widget>[
-                    Icon(Icons.video_label),
-                    Container(
-                      child: Text('MV收藏'),
-                    ),
-                    Container(
-                      child: Text('12'),
-                    ),
-                  ],
-                ),
-              ),
-
             ],
           ),
-
 
         ],
       ),
